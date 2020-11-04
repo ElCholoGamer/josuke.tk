@@ -1,0 +1,20 @@
+.linked-button {
+	background-color: #7289da;
+	border: none;
+	border-radius: 5px;
+	outline: none;
+	padding: 7px 10px;
+	white-space: normal;
+	cursor: pointer;
+
+	transition: all 200ms ease;
+
+	&:enabled:hover {
+		background-color: #5f75c2;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		filter: brightness(75%);
+	}
+}

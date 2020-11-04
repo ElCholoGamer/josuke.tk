@@ -1,0 +1,18 @@
+.switch-container {
+  height: 40px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  transition: background-color 300ms ease;
+}
+
+.switch-container > div {
+  height: 80%;
+  width: 40%;
+  background-color: white;
+  margin: 0 5px;
+  border-radius: 50%;
+  transition: transform 200ms ease-in-out;
+  box-shadow: 0 0 4px #23272a;
+}

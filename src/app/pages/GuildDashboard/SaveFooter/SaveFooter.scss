@@ -1,0 +1,77 @@
+.save-footer {
+	width: 80%;
+	height: 60px;
+	padding: 10px;
+	background-color: rgba(0, 0, 0, 0.7);
+	border-radius: 5px;
+	transition: transform 300ms ease;
+
+	position: fixed;
+	bottom: 60px;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	// Save message
+	> h4 {
+		margin: 0 18px;
+	}
+}
+
+.save-right {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	width: 40%;
+	justify-content: flex-end;
+}
+
+.save-button {
+	border-radius: 4px;
+	height: 100%;
+	width: 130px;
+	margin-left: 40px;
+	background-color: #43b582;
+	border: none;
+	outline: none;
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.save-footer input[type='button']:disabled {
+	filter: brightness(80%);
+	cursor: not-allowed;
+}
+
+.reset-button {
+	font-size: 14px;
+	background: none;
+	border: none;
+	outline: none;
+	&:enabled:hover {
+		cursor: pointer;
+		text-decoration: underline #6e6e6e;
+	}
+}
+
+@media screen and (max-width: 520px) {
+	.save-footer {
+		padding: 7px;
+		> h4 {
+			width: 60%;
+			margin: 0 8px;
+		}
+	}
+
+	.save-button {
+		width: 100%;
+		margin: 2px 0;
+	}
+
+	.save-right {
+		flex-direction: column;
+		align-items: center;
+	}
+}
