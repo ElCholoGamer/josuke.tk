@@ -11,7 +11,7 @@ const SRC = path.join(__dirname, '..', 'src');
 const config: webpack.Configuration = {
 	context: path.join(__dirname, '..'),
 	entry: {
-		app: path.join(SRC, 'APP', 'index.tsx'),
+		app: path.join(SRC, 'app', 'index.tsx'),
 	},
 	output: {
 		filename: '[name].[contenthash].js',
