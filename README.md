@@ -7,7 +7,6 @@
 Hmm there's not much to show tho
 
 <br />
-<br />
 
 ## Meanwhile Have an image of happy Josuke :D
 
