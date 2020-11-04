@@ -4,11 +4,12 @@
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
-		"target": "es6",
+		"target": "ES6",
 		"jsx": "react",
 		"sourceMap": true,
 		"strict": true,
-		"forceConsistentCasingInFileNames": true,
+		"allowJs": true,
+		"forceConsistentCasingInFileNames": false,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
@@ -21,7 +22,7 @@
 		"strictNullChecks": true,
 		"skipLibCheck": true,
 		"paths": {
-			"Assets/*": ["./src/app/Assets/*"]
+			"assets/*": ["./src/app/assets/*"]
 		}
 	},
 	"include": ["./src/app/**/*"],

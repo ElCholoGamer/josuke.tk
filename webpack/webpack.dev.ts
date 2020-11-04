@@ -15,12 +15,9 @@ const secure = proxy.startsWith('https');
 
 const config: webpack.Configuration = merge(common, {
 	mode: 'development',
-	output: {
-		path: path.join(__dirname, '..', 'src', 'server', 'build'),
-	},
 	devtool: 'eval-source-map',
 	devServer: {
-		contentBase: path.resolve(__dirname, '..', 'dist'),
+		contentBase: path.resolve(__dirname, '..', 'build'),
 		port,
 		hot: true,
 		historyApiFallback: true,

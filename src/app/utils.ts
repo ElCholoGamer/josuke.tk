@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import config from './config.json';
 import React from 'react';
+import config from './config.json';
 
 /**
  * Returns the query parameters for
@@ -100,46 +100,44 @@ export const fetchUser = async (): Promise<User | null> => {
 	}
 
 	console.log('Access token:', accessToken);
-	if (accessToken) {
-		// Fetch user data
-		try {
-			const Authorization = `Bearer ${accessToken}`,
-				// Fetch user info
-				res = await fetch('https://discordapp.com/api/users/@me', {
-					headers: { Authorization },
-				});
+	if (!accessToken) return null;
 
-			// Check if request was valid
-			if (res.status !== 200) {
-				if (res.status === 401) {
-					cookies.remove('access_token');
-					cookies.remove('refresh_token');
-				}
-				throw new Error(
-					'Request error (This could be caused by an invalid access token)'
-				);
+	// Fetch user data
+	try {
+		// Fetch user info
+		const res = await fetch('https://discordapp.com/api/users/@me', {
+			headers: { Authorization: `Bearer ${accessToken}` },
+		});
+
+		// Check if request was valid
+		if (res.status !== 200) {
+			if (res.status === 401) {
+				cookies.remove('access_token');
+				cookies.remove('refresh_token');
 			}
-			const user = await res.json();
-			const { username, discriminator, id, avatar } = user;
-
-			return {
-				...user,
-				admin: config.admins.includes(id),
-				accessToken,
-				tag: `${username}#${discriminator}`,
-				getAvatarURL(options = {}) {
-					const { size = 128, format = 'png' } = options;
-					return avatar
-						? `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=${size}`
-						: `https://cdn.discordapp.com/embed/avatars/${
-								discriminator % 5
-						  }.${format}`;
-				},
-			};
-		} catch (err) {
-			console.error(err);
+			throw new Error(
+				'Request error (This could be caused by an invalid access token)'
+			);
 		}
-	}
+		const user = await res.json();
+		const { username, discriminator, id, avatar } = user;
 
-	return null;
+		return {
+			...user,
+			admin: config.admins.includes(id),
+			accessToken,
+			tag: `${username}#${discriminator}`,
+			getAvatarURL(options = {}) {
+				const { size = 128, format = 'png' } = options;
+				return avatar
+					? `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=${size}`
+					: `https://cdn.discordapp.com/embed/avatars/${
+							discriminator % 5
+					  }.${format}`;
+			},
+		};
+	} catch (err) {
+		console.error(err);
+		return null;
+	}
 };

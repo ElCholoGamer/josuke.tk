@@ -1,18 +1,18 @@
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cookies, { CookieSetOptions } from 'universal-cookie';
 import './App.scss';
-import Loading from './Components/Loading';
+import Loading from './components/Loading';
 import { fetchUser, useQuery, User } from './utils';
 
-const Home = lazy(() => import('./Pages/Home'));
-const Admin = lazy(() => import('./Pages/Admin'));
-const GuildDashboard = lazy(() => import('./Pages/Dashboard/GuildDashboard'));
-const NotFound = lazy(() => import('./Pages/NotFound'));
-const Webhook = lazy(() => import('./Pages/WebHook'));
-const Footer = lazy(() => import('./Components/Footer'));
-const Dashboard = lazy(() => import('./Pages/Dashboard'));
-const Header = lazy(() => import('./Components/Header'));
+const Home = React.lazy(() => import('./pages/Home'));
+const Admin = React.lazy(() => import('./pages/Admin'));
+const GuildDashboard = React.lazy(() => import('./pages/GuildDashboard'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
+const Webhook = React.lazy(() => import('./pages/Webhook'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const Footer = React.lazy(() => import('./components/Footer'));
+const Header = React.lazy(() => import('./components/Header'));
 
 const App: React.FC = () => {
 	const [loaded, setLoaded] = React.useState(false);
@@ -48,7 +48,7 @@ const App: React.FC = () => {
 	} else if (!loaded) return <Loading />;
 
 	return (
-		<Suspense fallback={<Loading />}>
+		<React.Suspense fallback={<Loading />}>
 			<Header user={user} />
 			<Switch>
 				<Route
@@ -69,7 +69,7 @@ const App: React.FC = () => {
 				<Route path="/*" component={NotFound} />
 			</Switch>
 			<Footer />
-		</Suspense>
+		</React.Suspense>
 	);
 };
 
