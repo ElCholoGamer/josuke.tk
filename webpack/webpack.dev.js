@@ -19,6 +19,7 @@ module.exports = merge(common, {
 	devServer: {
 		contentBase: path.resolve(__dirname, '..', 'build'),
 		port,
+		compress: true,
 		hot: true,
 		historyApiFallback: true,
 		overlay: true,
@@ -28,6 +29,9 @@ module.exports = merge(common, {
 			'/': {
 				target: proxy,
 				secure,
+				bypass: ({ headers }) => {
+					if (headers.accept.indexOf('html') !== -1) return '/index.html';
+				},
 			},
 		},
 	},
