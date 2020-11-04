@@ -1,9 +1,9 @@
-import webpack from 'webpack';
-import { merge } from 'webpack-merge';
-import common from './webpack.common';
-import pkg from '../package.json';
-import path from 'path';
-import open from 'open';
+const webpack = require('webpack');
+const { merge } = require('webpack-merge');
+const common = require('./webpack.common');
+const pkg = require('../package.json');
+const path = require('path');
+const open = require('open');
 
 // Open dev browser
 const port = 3000;
@@ -13,7 +13,7 @@ open(`http://localhost:${port}/`);
 const { proxy = '/' } = pkg;
 const secure = proxy.startsWith('https');
 
-const config: webpack.Configuration = merge(common, {
+module.exports = merge(common, {
 	mode: 'development',
 	devtool: 'eval-source-map',
 	devServer: {
@@ -25,10 +25,11 @@ const config: webpack.Configuration = merge(common, {
 		stats: 'minimal',
 		quiet: true,
 		proxy: {
-			'/': { target: proxy, secure },
+			'/': {
+				target: proxy,
+				secure,
+			},
 		},
 	},
 	plugins: [new webpack.HotModuleReplacementPlugin()],
 });
-
-export default config;

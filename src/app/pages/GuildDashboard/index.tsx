@@ -25,7 +25,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			try {
 				newConfig = await (
 					await fetch(
-						`/api/config/${guildId}?authorization=${encodeURIComponent(
+						`/config/${guildId}?authorization=${encodeURIComponent(
 							`Bearer ${accessToken}`
 						)}`
 					)
@@ -82,7 +82,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 
 		// Update config
 		fetch(
-			`/api/config/${guildId}?authorization=${encodeURIComponent(
+			`/config/${guildId}?authorization=${encodeURIComponent(
 				`Bearer ${user.accessToken}`
 			)}`,
 			{
