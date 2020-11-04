@@ -1,0 +1,5 @@
+# The year is 2020. This is our last line of defense
+# against robots, who have taken over humanity.
+
+User-agent: *
+Disallow: /
