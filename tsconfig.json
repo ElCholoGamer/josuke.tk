@@ -21,7 +21,7 @@
 		"strictNullChecks": true,
 		"skipLibCheck": true,
 		"paths": {
-			"Assets/*": ["./src/app/assets/*"]
+			"Assets/*": ["./src/app/Assets/*"]
 		}
 	},
 	"include": ["./src/app/**/*"],

@@ -21,7 +21,7 @@ const config: webpack.Configuration = {
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 		alias: {
-			Assets: path.join(SRC, 'app', 'assets'),
+			Assets: path.join(SRC, 'app', 'Assets'),
 		},
 	},
 	module: {
