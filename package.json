@@ -6,10 +6,10 @@
 	"private": true,
 	"scripts": {
 		"build": "yarn build:server && yarn build:app",
-		"build:server": "tsc ./src/server/server.ts --esModuleInterop --skipLibCheck --outDir ./src/server-prod/",
+		"build:server": "tsc ./src/server/index.ts --esModuleInterop --skipLibCheck --outDir ./src/server-prod/",
 		"build:app": "webpack --config ./webpack/webpack.prod.js",
 		"start:dev": "webpack serve --config ./webpack/webpack.dev.js",
-		"serve:dev": "ts-node-dev --transpile-only --rs --respawn ./src/server/server.ts -d",
+		"serve:dev": "ts-node-dev --transpile-only --rs --respawn ./src/server/index.ts -d",
 		"serve": "node ./src/server-prod/server.js",
 		"analyze": "cross-env ANALYZE=true yarn build:app"
 	},
@@ -55,7 +55,6 @@
 		"css-minimizer-webpack-plugin": "^1.1.5",
 		"file-loader": "^6.2.0",
 		"fork-ts-checker-webpack-plugin": "^5.2.1",
-		"friendly-errors-webpack-plugin": "^1.7.0",
 		"html-webpack-plugin": "^4.5.0",
 		"node-sass": "^5.0.0",
 		"open": "^7.3.0",

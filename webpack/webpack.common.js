@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
 const SRC = path.join(__dirname, '..', 'src');
 
@@ -27,18 +26,18 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.tsx?$/,
+				test: /\.tsx?$/i,
 				loader: 'ts-loader',
 				options: {
 					transpileOnly: true,
 				},
 			},
 			{
-				test: /\.s?[ac]ss$/,
+				test: /\.s?[ac]ss$/i,
 				use: ['style-loader', 'css-loader', 'sass-loader'],
 			},
 			{
-				test: /assets[\\/].*\.(jpe?g|png|gif|mp4)$/,
+				test: /assets[\\/].*\.(jpe?g|png|gif|mp4)$/i,
 				loader: 'file-loader',
 				options: {
 					name: 'assets/[name].[ext]',
@@ -50,7 +49,6 @@ module.exports = {
 		new HtmlWebpackPlugin({ template: './src/app/index.html' }),
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
-		new FriendlyErrorsPlugin(),
 		!!process.env.ANALYZE && new BundleAnalyzerPlugin(),
 	].filter(plugin => plugin !== false),
 };

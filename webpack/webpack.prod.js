@@ -9,7 +9,7 @@ module.exports = merge(common, {
 	module: {
 		rules: [
 			{
-				test: /\.(t|j)sx?$/,
+				test: /\.(t|j)sx?$/i,
 				loader: 'babel-loader',
 				options: {
 					presets: [
