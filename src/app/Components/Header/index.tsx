@@ -69,7 +69,7 @@ const Header: React.FC<Props> = ({ user }) => {
 						<h3>{user.tag}</h3>
 						<img
 							className="user-avatar"
-							src={user.getAvatarURL({ format: 'png', size: 512 })}
+							src={user.getAvatarURL({ size: 512 })}
 							alt="User avatar"
 						/>
 						<input

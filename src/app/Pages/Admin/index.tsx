@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '../../utils';
 import './Admin.scss';
-import RickRoll from 'Assets/video/admin.mp4';
+import RickRoll from 'assets/video/admin.mp4';
 
 interface Props {
 	user: User | null;

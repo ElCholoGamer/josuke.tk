@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import LinkedButton from '../../../Components/LinkedButton/index';
+import LinkedButton from '../../components/LinkedButton/index';
 import SaveFooter from './SaveFooter';
-import Setting from '../../../Components/Setting';
-import { Config, User } from '../../../utils';
+import Setting from '../../components/Setting';
+import { Config, User } from '../../utils';
 import './GuildDashboard.scss';
 
 interface Props {

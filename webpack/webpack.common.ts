@@ -17,11 +17,12 @@ const config: webpack.Configuration = {
 		filename: '[name].[contenthash].js',
 		publicPath: '/',
 		chunkFilename: '[name].[contenthash].chunk.js',
+		path: path.join(__dirname, '..', 'build'),
 	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 		alias: {
-			Assets: path.join(SRC, 'app', 'Assets'),
+			assets: path.join(SRC, 'app', 'assets'),
 		},
 	},
 	module: {
@@ -38,7 +39,7 @@ const config: webpack.Configuration = {
 				use: ['style-loader', 'css-loader', 'sass-loader'],
 			},
 			{
-				test: /\.(jpe?g|png|svg|ico|webp|gif|mp4)$/,
+				test: /assets[\\/].*\.(jpe?g|png|gif|mp4)$/,
 				use: ['file-loader'],
 			},
 		],

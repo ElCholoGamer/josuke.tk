@@ -18,21 +18,19 @@ app.set('json spaces', 2);
 app.enable('trust proxy');
 
 // Middleware
-app.use(express.json());
-app.use(cors());
+app.use(express.json(), cors());
+
+// Static files
+export const BUILD_PATH = path.join(__dirname, '..', '..', 'build');
+app.use(express.static(BUILD_PATH));
+app.use(express.static(path.join(__dirname, '..', 'app', 'assets')));
 
 // Routers
 app.use('/api', apiRouter);
 app.use('/oauth', oauthRouter);
 app.use('/bot', botRouter);
 app.use('/close', closeRouter);
-
-if (process.env.NODE_ENV === 'production') {
-	// React app
-	app.use(express.static(path.join(__dirname, 'build')));
-	app.use(express.static(path.join(__dirname, '..', 'app', 'assets')));
-	app.use('/', indexRouter);
-}
+app.use('/', indexRouter);
 
 // Listening
 app.listen(PORT, () => console.log(`App listening on port ${PORT}...`));

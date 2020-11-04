@@ -1,10 +1,10 @@
 import React from 'react';
 import FeatureSection from './FeatureSection';
-import LinkedButton from '../../Components/LinkedButton/index';
-import PageLogo from 'Assets/img/page-logo.png';
-import ImageGen from 'Assets/img/image-gen.png';
-import LevelsImg from 'Assets/img/levels.png';
-import DashboardImg from 'Assets/img/dashboard.png';
+import LinkedButton from '../../components/LinkedButton/index';
+import PageLogo from 'assets/img/page-logo.png';
+import ImageGen from 'assets/img/image-gen.png';
+import LevelsImg from 'assets/img/levels.png';
+import DashboardImg from 'assets/img/dashboard.png';
 import './Home.scss';
 
 const Home: React.FC = () => {
