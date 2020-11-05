@@ -5,7 +5,6 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import morgan from 'morgan';
-import indexRouter from './routers/index';
 import apiRouter from './routers/api';
 import closeRouter from './routers/close';
 import oauthRouter from './routers/oauth';
@@ -31,13 +30,18 @@ export const BUILD_PATH = path.join(__dirname, '..', '..', 'build');
 app.use(express.static(BUILD_PATH));
 app.use(express.static(path.join(__dirname, '..', 'app', 'assets')));
 
-// Routers
+// Routes
 app.use('/api', apiRouter);
 app.use('/config', configRouter);
 app.use('/oauth', oauthRouter);
 app.use('/bot', botRouter);
 app.use('/close', closeRouter);
-app.use('/', indexRouter);
+
+if (!process.argv.includes('-d')) {
+	app.get('*', (req, res) => {
+		res.status(200).sendFile(path.join(BUILD_PATH, 'index.html'));
+	});
+}
 
 // Listening
 app.listen(PORT, () => console.log(`App listening on port ${PORT}...`));
