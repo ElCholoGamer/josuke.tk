@@ -21,6 +21,7 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 		alias: {
 			assets: path.join(SRC, 'app', 'assets'),
+			components: path.join(SRC, 'app', 'components'),
 		},
 	},
 	module: {

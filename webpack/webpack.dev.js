@@ -30,7 +30,7 @@ module.exports = merge(common, {
 				target: proxy,
 				secure,
 				bypass: ({ headers }) => {
-					if (headers.accept.indexOf('html') !== -1) return '/index.html';
+					if (headers.accept.includes('html')) return '/index.html';
 				},
 			},
 		},

@@ -22,7 +22,8 @@
 		"strictNullChecks": true,
 		"skipLibCheck": true,
 		"paths": {
-			"assets/*": ["./src/app/assets/*"]
+			"assets/*": ["./src/app/assets/*"],
+			"components/*": ["./src/app/components/*"]
 		}
 	},
 	"include": ["./src/app/**/*"],
