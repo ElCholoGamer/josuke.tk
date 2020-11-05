@@ -1,18 +1,24 @@
 import React from 'react';
 import FeatureSection from './FeatureSection';
-import LinkedButton from '../../components/LinkedButton/index';
+import LinkedButton from 'components/LinkedButton/index';
 import PageLogo from 'assets/img/page-logo.png';
 import ImageGen from 'assets/img/image-gen.png';
 import LevelsImg from 'assets/img/levels.png';
 import DashboardImg from 'assets/img/dashboard.png';
 import './Home.scss';
+import SuspenseImage from 'components/SuspenseImage';
 
 const Home: React.FC = () => {
 	document.title = 'Josuke';
 
 	return (
 		<main className="main-page">
-			<img className="big-image" alt="Bot avatar" src={PageLogo} />
+			<SuspenseImage
+				src={PageLogo}
+				alt="bot avatar"
+				className="logo"
+				fallback={<div className="logo-fallback" />}
+			/>
 			<h1 className="subtitle">Spice up your server with a JoJo bot!</h1>
 			<h3>Some features include...</h3>
 
