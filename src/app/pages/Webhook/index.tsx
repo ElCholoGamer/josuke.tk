@@ -1,5 +1,5 @@
 import React from 'react';
-import Setting from '../../components/Setting';
+import Setting from 'components/Setting';
 import FileInfo from './FileInfo';
 import './Webhook.scss';
 

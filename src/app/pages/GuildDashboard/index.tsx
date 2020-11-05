@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import LinkedButton from '../../components/LinkedButton/index';
+import LinkedButton from 'components/LinkedButton/index';
 import SaveFooter from './SaveFooter';
-import Setting from '../../components/Setting';
+import Setting from 'components/Setting';
 import { Config, User } from '../../utils';
 import './GuildDashboard.scss';
 
@@ -13,7 +13,7 @@ interface Props {
 const GuildDashboard: React.FC<Props> = ({ user }) => {
 	const [config, setConfig] = React.useState<Config | null>(null);
 	const [prevConfig, setPrevConfig] = React.useState<Config | null>(null);
-	const [enabled, setEnabled] = React.useState(true);
+	const [saveButtons, setSaveButtons] = React.useState(true);
 
 	const { guildId } = useParams<{ guildId: string }>();
 
@@ -62,7 +62,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 	const prefixLimiter = (str: string) =>
 		str
 			.trimStart()
-			.replace(/\s.$/, ' ')
+			.replace(/\s+$/, ' ')
 			.toLowerCase()
 			.substr(0, Math.min(str.length, 15));
 
@@ -78,7 +78,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		}
 
 		// Disable buttons
-		setEnabled(false);
+		setSaveButtons(false);
 
 		// Update config
 		fetch(
@@ -96,12 +96,9 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 				if (res.status === 'OK') {
 					setPrevConfig(config);
 				} else console.log('Failed to save config:', res);
-				setEnabled(true);
 			})
-			.catch(err => {
-				console.error(err);
-				setEnabled(true);
-			});
+			.catch(console.error)
+			.finally(() => setSaveButtons(true));
 	};
 
 	return (
@@ -162,7 +159,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 				</Setting>
 				<SaveFooter
 					enabled={JSON.stringify(config) !== JSON.stringify(prevConfig)}
-					buttonsEnabled={enabled}
+					buttonsEnabled={saveButtons}
 					onSave={handleClick}
 					onReset={() => setConfig(prevConfig)}
 				/>
