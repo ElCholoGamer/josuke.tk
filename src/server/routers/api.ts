@@ -1,11 +1,12 @@
 import express from 'express';
+import { asyncHandler, isAdmin } from '../utils';
 import fetch from 'node-fetch';
-import { convertPerms } from 'jsdiscordperms';
 
 const router = express.Router();
 
-router.get('/guilds/:accessToken', async (req, res) => {
-	try {
+router.get(
+	'/guilds/:accessToken',
+	asyncHandler(async (req, res) => {
 		// Fetch bot guilds
 		const botGuilds = await (
 			await fetch(`https://discordapp.com/api/users/@me/guilds`, {
@@ -23,15 +24,13 @@ router.get('/guilds/:accessToken', async (req, res) => {
 				).json()
 			).map((guild: any) => ({
 				...guild,
-				admin: convertPerms(guild.permissions).ADMINISTRATOR,
+				admin: isAdmin(guild.permissions),
 				botAvailable: botGuilds.some(
 					(botGuild: any) => botGuild.id === guild.id
 				),
 			}))
 		);
-	} catch (err) {
-		res.status(500).json({ error: err });
-	}
-});
+	})
+);
 
 export default router;

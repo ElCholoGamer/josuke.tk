@@ -1,43 +1,31 @@
 import express from 'express';
 import mysql from 'mysql';
-import { convertPerms } from 'jsdiscordperms';
+import { isAdmin, asyncHandler, db } from '../utils';
 
 const router = express.Router();
-const { BOT_TOKEN, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
 
 // Get the settings for a guild ID
-router.get('/config/:guildId', async (req, res) => {
-	const { guildId } = req.params;
-	if (!(await checkAdmin(req.query.authorization?.toString(), guildId))) {
-		return res.status(200).json({ status: 'NOT ALLOWED' });
-	}
-
-	// Fetch guild name
-	const { name } = await (
-		await fetch(`https://discordapp.com/api/guilds/${guildId}`, {
-			headers: { Authorization: `Bot ${BOT_TOKEN}` },
-		})
-	).json();
-	if (!name) {
-		return res.status(200).json({ status: 'GUILD NOT FOUND' });
-	}
-
-	const connection = getConnection();
-	connection.connect(err => {
-		if (err) {
-			console.error(err);
-			return res.status(500).json({ status: 'ERROR', error: err });
+router.get(
+	'/config/:guildId',
+	asyncHandler(async (req, res) => {
+		const { guildId } = req.params;
+		if (!(await checkAdmin(req.query.authorization?.toString(), guildId))) {
+			return res.status(200).json({ status: 'NOT ALLOWED' });
 		}
 
-		connection.query(
+		// Fetch guild name
+		const { name } = await (
+			await fetch(`https://discordapp.com/api/guilds/${guildId}`, {
+				headers: { Authorization: `Bot ${process.env.BOT_TOKEN}` },
+			})
+		).json();
+		if (!name) return res.status(200).json({ status: 'GUILD NOT FOUND' });
+
+		db.query(
 			'SELECT * FROM configs WHERE guild_id=?',
 			[guildId],
 			(err, results) => {
-				connection.end();
-				if (err) {
-					console.error(err);
-					return res.status(500).json({ status: 'ERROR', error: err });
-				}
+				if (err) throw new Error(err.sqlMessage);
 
 				if (!results.length) {
 					res.status(200).json({
@@ -65,65 +53,45 @@ router.get('/config/:guildId', async (req, res) => {
 				}
 			}
 		);
-	});
-});
+	})
+);
 
 // Update the settings for a guild ID
-router.put('/config/:guildId', async (req, res) => {
-	const { guildId } = req.params;
-	try {
+router.put(
+	'/config/:guildId',
+	asyncHandler(async (req, res) => {
+		const { guildId } = req.params;
+
 		// Check if uses is allowed
 		if (!(await checkAdmin(req.query.authorization?.toString(), guildId))) {
 			return res.status(200).json({ status: 'NOT ALLOWED' });
 		}
 
-		const connection = getConnection();
-		connection.connect(err => {
-			if (err) {
-				console.error(err);
-				return res.status(500).json({ status: 'MYSQL ERROR', error: err });
-			}
-
-			// Upsert data into table
-			const { prefix, snipe, levels, level_message, send_level } = req.body;
-			const params = [
-				guildId,
-				prefix || 'jo! ',
-				snipe ? 1 : 0,
-				levels ? 1 : 0,
-				send_level ? 1 : 0,
-				level_message,
-			];
-			connection.query(
-				'INSERT INTO configs (guild_id,prefix,snipe,levels,send_level,level_message) VALUES (?,?,?,?,?,?) ' +
-					'ON DUPLICATE KEY UPDATE guild_id=?, prefix=?, snipe=?, levels=?,send_level=?,level_message=?',
-				[...params, ...params],
-				err => {
-					connection.end();
-					if (err) {
-						console.error(err);
-						res.status(500).json({ status: 'MYSQL ERROR', error: err });
-					} else {
-						res.status(200).json({ status: 'OK' });
-					}
+		// Upsert data into table
+		const { prefix, snipe, levels, level_message, send_level } = req.body;
+		const params = [
+			guildId,
+			prefix || 'jo! ',
+			snipe ? 1 : 0,
+			levels ? 1 : 0,
+			send_level ? 1 : 0,
+			level_message,
+		];
+		db.query(
+			'INSERT INTO configs (guild_id,prefix,snipe,levels,send_level,level_message) VALUES (?,?,?,?,?,?) ' +
+				'ON DUPLICATE KEY UPDATE guild_id=?, prefix=?, snipe=?, levels=?,send_level=?,level_message=?',
+			[...params, ...params],
+			err => {
+				if (err) {
+					console.error(err);
+					res.status(500).json({ status: 'MYSQL ERROR', error: err });
+				} else {
+					res.status(200).json({ status: 'OK' });
 				}
-			);
-		});
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ status: 'ERROR' });
-	}
-});
-
-const getConnection = () =>
-	mysql.createConnection({
-		host: DB_HOST,
-		port: 3306,
-		user: DB_USER,
-		password: DB_PASSWORD,
-		database: DB_NAME,
-		supportBigNumbers: true,
-	});
+			}
+		);
+	})
+);
 
 const checkAdmin = async (
 	authorization: string | undefined,
@@ -140,8 +108,7 @@ const checkAdmin = async (
 
 	// Check if user has access to guild and is administrator
 	return guilds.some(
-		(guild: any) =>
-			guild.id === guildId && convertPerms(guild.permissions).ADMINISTRATOR
+		(guild: any) => guild.id === guildId && isAdmin(guild.permissions)
 	);
 };
 

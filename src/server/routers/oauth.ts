@@ -1,6 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
+import { asyncHandler } from '../utils';
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
 
@@ -25,15 +26,18 @@ router.get('/login', (req, res) => {
 });
 
 // Login callback
-router.get('/callback', async (req, res) => {
-	const { code, error } = req.query;
+router.get(
+	'/callback',
+	asyncHandler(async (req, res) => {
+		const { code, error } = req.query;
 
-	if (error) return res.status(200).redirect('/');
+		if (error) return res.status(200).redirect('/');
 
-	if (!code)
-		return res.status(400).json({ error: 'No code querystring was provided' });
+		if (!code)
+			return res
+				.status(400)
+				.json({ error: 'No code querystring was provided' });
 
-	try {
 		const { protocol, hostname, baseUrl, path } = req;
 		const redirect_uri = `${protocol}://${hostname}${baseUrl}${path}`;
 
@@ -65,42 +69,43 @@ router.get('/callback', async (req, res) => {
 				expires_in,
 			})}`
 		);
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ error: err });
-	}
-});
+	})
+);
 
 // Get refreshed token
-router.get('/refresh/:token', async (req, res) => {
-	const { token } = req.params;
+router.get(
+	'/refresh/:token',
+	asyncHandler(async (req, res) => {
+		const { token } = req.params;
 
-	const json = await (
-		await fetch(
-			`https://discord.com/api/oauth2/token?grant_type=refresh_token`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: stringify({
-					client_id: CLIENT_ID,
-					client_secret: CLIENT_SECRET,
-					redirect_uri: `${req.protocol}://${req.hostname}${req.path}`,
-					grant_type: 'refresh_token',
-					refresh_token: token,
-					scope: OAuthScope,
-				}),
-			}
-		)
-	).json();
+		const json = await (
+			await fetch(
+				`https://discord.com/api/oauth2/token?grant_type=refresh_token`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: stringify({
+						client_id: CLIENT_ID,
+						client_secret: CLIENT_SECRET,
+						redirect_uri: `${req.protocol}://${req.hostname}${req.path}`,
+						grant_type: 'refresh_token',
+						refresh_token: token,
+						scope: OAuthScope,
+					}),
+				}
+			)
+		).json();
 
-	res.json(json);
-});
+		res.json(json);
+	})
+);
 
 // Revoke an access token
-router.post('/revoke/:token', async (req, res) => {
-	try {
+router.post(
+	'/revoke/:token',
+	asyncHandler(async (req, res) => {
 		const { token } = req.params;
 		res.status(200).json(
 			await (
@@ -117,10 +122,7 @@ router.post('/revoke/:token', async (req, res) => {
 				})
 			).json()
 		);
-	} catch (err) {
-		console.error(err);
-		res.status(500).json({ status: 'ERROR' });
-	}
-});
+	})
+);
 
 export default router;

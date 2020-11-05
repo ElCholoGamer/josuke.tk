@@ -4285,10 +4285,6 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
-jsdiscordperms@PgBiel/jsdiscordperms:
-  version "1.2.0"
-  resolved "https://codeload.github.com/PgBiel/jsdiscordperms/tar.gz/61a7bc02536bf2381f2e41cdb39e672c35428986"
-
 jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-2.5.2.tgz#80564d2e483dacf6e8ef209650a67df3f0c283a4"
