@@ -36,8 +36,8 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 
 	if (!user)
 		return <h1 className="med-text">Log in to access your servers!</h1>;
-
-	if (!guilds?.filter) return <h1 className="med-text">Loading servers...</h1>;
+	else if (!guilds?.filter)
+		return <h1 className="med-text">Loading servers...</h1>;
 
 	const adminGuilds = guilds
 		.filter(guild => guild.admin)
