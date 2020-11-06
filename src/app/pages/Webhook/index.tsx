@@ -27,6 +27,8 @@ const Webhook: React.FC = () => {
 	const [posting, setPosting] = React.useState(false);
 	const fileInput = React.useRef<HTMLInputElement>(null);
 
+	document.title = 'Webhooks';
+
 	const changeFiles = ({
 		target: { files },
 	}: React.ChangeEvent<HTMLInputElement>) => {

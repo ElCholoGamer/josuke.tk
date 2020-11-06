@@ -8,6 +8,7 @@ interface Props {
 }
 
 const Admin: React.FC<Props> = ({ user }) => {
+	document.title = 'Admin';
 	if (!user?.admin) return <video src={RickRoll} controls={false} autoPlay />;
 
 	return <h1>Admin</h1>;
