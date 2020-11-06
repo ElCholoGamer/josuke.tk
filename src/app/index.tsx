@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
-if (process.env.HIDE_LOGS === 'true') {
+if (process.env.NODE_ENV === 'production') {
 	// Disable logs on production
 	console.log = function () {};
 	console.warn = function () {};
