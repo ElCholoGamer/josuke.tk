@@ -58,10 +58,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 	document.title = config.guildName;
 
 	const prefixLimiter = (str: string) =>
-		str
-			.replace(/(((?<= ) )|^ +)/g, ' ')
-			.toLowerCase()
-			.substr(0, 15);
+		str.trimStart().replace(/\s+$/, ' ').toLowerCase().substr(0, 15);
 
 	const handleClick = () => {
 		// Check if string fields are okay
