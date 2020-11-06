@@ -42,9 +42,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			}
 		};
 
-		if (!config && user) {
-			fetchConfig(user.accessToken).catch(console.error);
-		}
+		if (!config && user) fetchConfig(user.accessToken).catch(console.error);
 
 		return () => {
 			if (timeout) clearTimeout(timeout);
@@ -91,9 +89,8 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 				body: JSON.stringify(config),
 			}
 		)
-			.then(res => res.json())
 			.then(res => {
-				if (res.status === 'OK') {
+				if (res.status === 200) {
 					setPrevConfig(config);
 				} else console.log('Failed to save config:', res);
 			})

@@ -57,7 +57,7 @@ router.get(
 // Update the settings for a guild ID
 router.put(
 	'/:guildId',
-	asyncHandler(async (req, res, next) => {
+	asyncHandler(async (req, res) => {
 		const { guildId } = req.params;
 
 		// Check if uses is allowed
@@ -68,7 +68,7 @@ router.put(
 		const { prefix, snipe, levels, level_message, send_level } = req.body;
 		const params = [
 			guildId,
-			prefix || 'jo! ',
+			prefix,
 			+snipe,
 			+levels,
 			+send_level,
