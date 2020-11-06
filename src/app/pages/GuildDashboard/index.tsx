@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import LinkedButton from 'components/LinkedButton/index';
 import SaveFooter from './SaveFooter';
 import Setting from 'components/Setting';
-import { Config, User } from '../../utils';
+import { compareObjects, Config, User } from '../../utils';
 import './GuildDashboard.scss';
 
 interface Props {
@@ -59,19 +59,18 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 
 	const prefixLimiter = (str: string) =>
 		str
-			.trimStart()
-			.replace(/\s+$/, ' ')
+			.replace(/(((?<= ) )|^ +)/g, ' ')
 			.toLowerCase()
-			.substr(0, Math.min(str.length, 15));
+			.substr(0, 15);
 
 	const handleClick = () => {
 		// Check if string fields are okay
 		const { prefix, level_message, levels, send_level } = config;
 		if (!prefix.length) {
-			alert('You cannot have an empty prefix!');
+			alert('Cannot have an empty prefix!');
 			return;
 		} else if (!level_message.length && levels && send_level) {
-			alert('You cannot have an empty level-up message!');
+			alert('Cannot have an empty level-up message!');
 			return;
 		}
 
@@ -155,7 +154,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 					Level-up message:
 				</Setting>
 				<SaveFooter
-					enabled={JSON.stringify(config) !== JSON.stringify(prevConfig)}
+					enabled={!compareObjects(config, prevConfig)}
 					buttonsEnabled={saveButtons}
 					onSave={handleClick}
 					onReset={() => setConfig(prevConfig)}

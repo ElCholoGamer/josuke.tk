@@ -62,7 +62,9 @@ router.put(
 
 		// Check if uses is allowed
 		if (!(await checkAdmin(req.query.authorization?.toString(), guildId)))
-			return res.status(200).json({ status: 'NOT ALLOWED' });
+			return res
+				.status(401)
+				.json({ status: 401, message: 'User is not an administrator' });
 
 		// Upsert data into table
 		const { prefix, snipe, levels, level_message, send_level } = req.body;
@@ -100,7 +102,8 @@ const checkAdmin = async (
 
 	// Check if user has access to guild and is administrator
 	return guilds.some(
-		(guild: any) => guild.id === guildId && isAdmin(guild.permissions)
+		(guild: { id: string; permissions: number }) =>
+			guild.id === guildId && isAdmin(guild.permissions)
 	);
 };
 

@@ -26,7 +26,7 @@ router.get(
 				...guild,
 				admin: isAdmin(guild.permissions),
 				botAvailable: botGuilds.some(
-					(botGuild: any) => botGuild.id === guild.id
+					(botGuild: { id: string }) => botGuild.id === guild.id
 				),
 			}))
 		);
