@@ -3,11 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const ESLintPlugin = require('eslint-webpack-plugin');
 
 const SRC = path.join(__dirname, '..', 'src');
 
-console.log('Dirname:', __dirname);
 /** @type {require('webpack').Configuration} */
 module.exports = {
 	context: path.join(__dirname, '..'),
@@ -64,6 +62,5 @@ module.exports = {
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
 		!!process.env.ANALYZE && new BundleAnalyzerPlugin(),
-		new ESLintPlugin(),
 	].filter(plugin => plugin !== false),
 };

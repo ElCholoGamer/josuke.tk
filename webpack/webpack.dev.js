@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const pkg = require('../package.json');
 const path = require('path');
 const open = require('open');
@@ -36,5 +37,5 @@ module.exports = merge(common, {
 			},
 		},
 	},
-	plugins: [new webpack.HotModuleReplacementPlugin()],
+	plugins: [new webpack.HotModuleReplacementPlugin(), new ESLintPlugin()],
 });
