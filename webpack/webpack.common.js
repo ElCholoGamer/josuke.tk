@@ -7,6 +7,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 
 const SRC = path.join(__dirname, '..', 'src');
 
+console.log('Dirname:', __dirname);
 /** @type {require('webpack').Configuration} */
 module.exports = {
 	context: path.join(__dirname, '..'),
