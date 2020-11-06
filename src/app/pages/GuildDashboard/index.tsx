@@ -49,13 +49,12 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		};
 	}, [user, config, guildId]);
 
-	if (!user) {
+	if (!user)
 		return <h1 className="med-text">Log in to access your servers!</h1>;
-	} else if (!config) {
-		return <h1 className="med-text">Loading dashboard...</h1>;
-	}
 
-	document.title = config.guildName;
+	if (!config) return <h1 className="med-text">Loading dashboard...</h1>;
+
+	document.title = `Dashboard | ${config.guildName}`;
 
 	const prefixLimiter = (str: string) =>
 		str.trimStart().replace(/\s+$/, ' ').toLowerCase().substr(0, 15);
@@ -95,69 +94,70 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 	};
 
 	return (
-		<main className="dashboard-main">
-			<LinkedButton
-				to="/dashboard"
-				style={{
-					width: '90px',
-					height: '40px',
-					fontSize: '17px',
-					margin: '30px 0 0 30px',
-				}}>
-				Go Back
-			</LinkedButton>
-			<div className="dashboard-content">
-				<h1>
-					Dashboard for{' '}
-					<span style={{ fontWeight: 700 }}>{config.guildName}</span>
-				</h1>
-				<Setting
-					name="prefix"
-					config={config}
-					setConfig={setConfig}
-					type="text"
-					stringFormat={prefixLimiter}>
-					Bot prefix:
-				</Setting>
-				<Setting
-					name="snipe"
-					config={config}
-					setConfig={setConfig}
-					type="toggle">
-					Message sniping:
-				</Setting>
+		<h1>Something lol</h1>
+		// <main className="dashboard-main">
+		// 	<LinkedButton
+		// 		to="/dashboard"
+		// 		style={{
+		// 			width: '90px',
+		// 			height: '40px',
+		// 			fontSize: '17px',
+		// 			margin: '30px 0 0 30px',
+		// 		}}>
+		// 		Go Back
+		// 	</LinkedButton>
+		// 	<div className="dashboard-content">
+		// 		<h1>
+		// 			Dashboard for{' '}
+		// 			<span style={{ fontWeight: 700 }}>{config.guildName}</span>
+		// 		</h1>
+		// 		<Setting
+		// 			name="prefix"
+		// 			config={config}
+		// 			setConfig={setConfig}
+		// 			type="text"
+		// 			stringFormat={prefixLimiter}>
+		// 			Bot prefix:
+		// 		</Setting>
+		// 		<Setting
+		// 			name="snipe"
+		// 			config={config}
+		// 			setConfig={setConfig}
+		// 			type="toggle">
+		// 			Message sniping:
+		// 		</Setting>
 
-				<h2 className="config-subtitle">Leveling:</h2>
-				<Setting
-					name="levels"
-					config={config}
-					setConfig={setConfig}
-					type="toggle">
-					Enabled:
-				</Setting>
-				<Setting
-					name="send_level"
-					config={config}
-					setConfig={setConfig}
-					type="toggle">
-					Send level-up message:
-				</Setting>
-				<Setting
-					name="level_message"
-					config={config}
-					setConfig={setConfig}
-					maxLength={200}
-					type="textarea">
-					Level-up message:
-				</Setting>
-				<SaveFooter
-					enabled={!compareObjects(config, prevConfig)}
-					buttonsEnabled={saveButtons}
-					onSave={handleClick}
-					onReset={() => setConfig(prevConfig)}
-				/>
-			</div>
-		</main>
+		// 		<h2 className="config-subtitle">Leveling:</h2>
+		// 		<Setting
+		// 			name="levels"
+		// 			config={config}
+		// 			setConfig={setConfig}
+		// 			type="toggle">
+		// 			Enabled:
+		// 		</Setting>
+		// 		<Setting
+		// 			name="send_level"
+		// 			config={config}
+		// 			setConfig={setConfig}
+		// 			type="toggle">
+		// 			Send level-up message:
+		// 		</Setting>
+		// 		<Setting
+		// 			name="level_message"
+		// 			config={config}
+		// 			setConfig={setConfig}
+		// 			maxLength={200}
+		// 			type="textarea">
+		// 			Level-up message:
+		// 		</Setting>
+		// 		<SaveFooter
+		// 			enabled={!compareObjects(config, prevConfig)}
+		// 			buttonsEnabled={saveButtons}
+		// 			onSave={handleClick}
+		// 			onReset={() => setConfig(prevConfig)}
+		// 		/>
+		// 	</div>
+		// </main>
 	);
 };
 
