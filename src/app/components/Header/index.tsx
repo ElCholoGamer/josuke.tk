@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import { User } from '../../utils';
+import { debug, User } from '../../utils';
 import './Header.scss';
 import NavButton from './NavButton';
 
@@ -35,7 +35,7 @@ const Header: React.FC<Props> = ({ user }) => {
 					method: 'POST',
 				})
 					.then(() => window.location.reload())
-					.catch(console.error);
+					.catch(debug);
 				break;
 			default:
 		}

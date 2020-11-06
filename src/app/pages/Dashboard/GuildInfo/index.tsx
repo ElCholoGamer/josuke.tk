@@ -42,14 +42,12 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 		// Wait until window closes
 		const timer = setInterval(async () => {
 			if (!win?.closed) return;
-			// console.log('Window closed!');
 			clearInterval(timer);
 
 			// Fetch new bot guilds
 			const newGuilds = await (
 				await fetch(`/api/guilds/${accessToken}`)
 			).json();
-			// console.log('New guilds:', newGuilds);
 
 			// Check if bot was added
 			if (newGuilds.some((g: Guild) => g.id === guild.id && g.botAvailable)) {

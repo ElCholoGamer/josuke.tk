@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Cookies, { CookieSetOptions } from 'universal-cookie';
 import './App.scss';
 import Loading from 'components/Loading';
-import { fetchUser, useQuery, User } from './utils';
+import { debug, fetchUser, useQuery, User } from './utils';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Admin = React.lazy(() => import('./pages/Admin'));
@@ -22,7 +22,7 @@ const App: React.FC = () => {
 	React.useEffect(() => {
 		fetchUser()
 			.then(setUser)
-			.catch(console.error)
+			.catch(debug)
 			.finally(() => setLoaded(true));
 	}, []);
 

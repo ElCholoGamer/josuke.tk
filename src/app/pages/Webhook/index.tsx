@@ -2,6 +2,7 @@ import React from 'react';
 import Setting from 'components/Setting';
 import FileInfo from './FileInfo';
 import './Webhook.scss';
+import { debug } from 'src/app/utils';
 
 interface WebhookData {
 	url: string;
@@ -62,8 +63,8 @@ const Webhook: React.FC = () => {
 			method: 'POST',
 			body: form,
 		})
-			.then(console.log)
-			.catch(console.error)
+			.then(debug)
+			.catch(debug)
 			.finally(() => {
 				setPosting(false);
 			});

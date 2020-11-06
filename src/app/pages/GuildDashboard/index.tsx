@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import LinkedButton from 'components/LinkedButton/index';
 import SaveFooter from './SaveFooter';
 import Setting from 'components/Setting';
-import { compareObjects, Config, User } from '../../utils';
+import { compareObjects, Config, debug, User } from '../../utils';
 import './GuildDashboard.scss';
 
 interface Props {
@@ -31,7 +31,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 					)
 				).json();
 			} catch (err) {
-				console.error(err);
+				debug(err);
 			}
 
 			if (newConfig?.guildName) {
@@ -42,7 +42,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			}
 		};
 
-		if (!config && user) fetchConfig(user.accessToken).catch(console.error);
+		if (!config && user) fetchConfig(user.accessToken).catch(debug);
 
 		return () => {
 			if (timeout) clearTimeout(timeout);
@@ -87,9 +87,9 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			.then(res => {
 				if (res.status === 200) {
 					setPrevConfig(config);
-				} else console.log('Failed to save config:', res);
+				} else debug('Failed to save config:', res);
 			})
-			.catch(console.error)
+			.catch(debug)
 			.finally(() => setSaveButtons(true));
 	};
 

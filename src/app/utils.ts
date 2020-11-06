@@ -95,11 +95,11 @@ export const fetchUser = async (): Promise<User | null> => {
 				refreshToken = refresh_token;
 			}
 		} catch (err) {
-			console.error(err);
+			debug(err);
 		}
 	}
 
-	console.log('Access token:', accessToken);
+	debug('Access token:', accessToken);
 	if (!accessToken) return null;
 
 	try {
@@ -136,7 +136,7 @@ export const fetchUser = async (): Promise<User | null> => {
 			},
 		};
 	} catch (err) {
-		console.error(err);
+		debug(err);
 		return null;
 	}
 };
@@ -149,4 +149,9 @@ export const compareObjects = (obj1: any, obj2: any) => {
 
 	if (keys1.length !== keys2.length) return false;
 	return keys1.every(key => obj1[key] === obj2[key]);
+};
+
+export const debug = (message: any, ...optionalParams: any[]) => {
+	if (process.env.NODE_ENV === 'development')
+		console.log(message, optionalParams);
 };

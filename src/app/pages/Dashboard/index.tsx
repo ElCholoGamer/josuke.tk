@@ -1,6 +1,6 @@
 import React from 'react';
 import GuildInfo from './GuildInfo';
-import { Guild, User } from '../../utils';
+import { debug, Guild, User } from '../../utils';
 import './Dashboard.scss';
 
 interface Props {
@@ -23,7 +23,7 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 
 				if (mounted.current) setGuilds(res);
 			} catch (err) {
-				console.error(err);
+				debug(err);
 			}
 		})();
 
