@@ -1,6 +1,7 @@
 import express from 'express';
 import { isAdmin, asyncHandler } from '../util/utils';
 import { asyncQuery } from '../util/db';
+import fetch from 'node-fetch';
 
 const router = express.Router();
 
