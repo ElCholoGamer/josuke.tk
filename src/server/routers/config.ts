@@ -10,29 +10,22 @@ router.get(
 	'/:guildId',
 	asyncHandler(async (req, res) => {
 		const { guildId } = req.params;
-		if (!(await checkAdmin(req.query.authorization?.toString(), guildId)))
-			return res
-				.status(401)
-				.json({ status: 401, message: 'User is not an administrator' });
+		const guildName = await checkAdmin(
+			req.query.authorization?.toString(),
+			guildId
+		);
 
-		// Fetch guild name
-		const { name } = await (
-			await fetch(`https://discordapp.com/api/guilds/${guildId}`, {
-				headers: { Authorization: `Bot ${process.env.BOT_TOKEN}` },
-			})
-		).json();
-
-		if (!name)
-			return res
-				.status(404)
-				.json({ status: `Guild by ID "${guildId}" not found` });
+		if (!guildName)
+			return res.status(401).json({
+				status: 401,
+				message: 'User is not an administrator or guild does not exist.',
+			});
 
 		const results = (await asyncQuery(
 			'SELECT * FROM configs WHERE guild_id=?',
 			[guildId]
 		)) || [
 			{
-				guildName: name,
 				prefix: 'jo! ',
 				snipe: true,
 				levels: true,
@@ -44,7 +37,7 @@ router.get(
 		const [{ prefix, snipe, levels, send_level, level_message }] = results;
 
 		res.status(200).json({
-			guildName: name,
+			guildName,
 			prefix,
 			snipe: !!snipe,
 			levels: !!levels,
@@ -87,24 +80,30 @@ router.put(
 	})
 );
 
+/**
+ * A function that checks if the given authorization header
+ * is authrorized for retrieving the given guild ID's data,
+ * and returns the guild's name if so.
+ * @param authorization The authorization request header.
+ * @param guildId The guild's ID
+ */
 const checkAdmin = async (
 	authorization: string | undefined,
 	guildId: string
-): Promise<boolean> => {
-	if (!authorization) return false;
+): Promise<string | null> => {
+	if (!authorization) return null;
 
 	// Get user guilds
-	const guilds = await (
+	const guilds: any[] = await (
 		await fetch('https://discordapp.com/api/users/@me/guilds', {
 			headers: { Authorization: authorization },
 		})
 	).json();
 
 	// Check if user has access to guild and is administrator
-	return guilds.some(
-		(guild: { id: string; permissions: number }) =>
-			guild.id === guildId && isAdmin(guild.permissions)
-	);
+	const guild = guilds.find((guild: { id: string }) => guild.id === guildId);
+	if (!guild || !isAdmin(guild.permissions)) return null;
+	return guild.name;
 };
 
 export default router;
