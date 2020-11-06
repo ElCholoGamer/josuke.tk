@@ -1,20 +1,20 @@
-const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const SRC = path.join(__dirname, '..', 'src');
 
-/** @type {webpack.Configuration} */
+/** @type {require('webpack').Configuration} */
 module.exports = {
 	context: path.join(__dirname, '..'),
 	entry: path.join(SRC, 'app', 'index.tsx'),
 	output: {
-		filename: '[name].[contenthash:8].js',
+		filename: '[name].[contenthash].js',
 		publicPath: '/',
-		chunkFilename: '[name].[contenthash:8].chunk.js',
+		chunkFilename: '[name].[contenthash].chunk.js',
 		path: path.join(__dirname, '..', 'build'),
 	},
 	resolve: {
@@ -28,10 +28,22 @@ module.exports = {
 		rules: [
 			{
 				test: /\.tsx?$/i,
-				loader: 'ts-loader',
-				options: {
-					transpileOnly: true,
-				},
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: 'babel-loader',
+						options: {
+							cacheDirectory: true,
+							sourceType: 'unambiguous',
+						},
+					},
+					{
+						loader: 'ts-loader',
+						options: {
+							transpileOnly: true,
+						},
+					},
+				],
 			},
 			{
 				test: /\.s?[ac]ss$/i,
@@ -51,5 +63,6 @@ module.exports = {
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
 		!!process.env.ANALYZE && new BundleAnalyzerPlugin(),
+		new ESLintPlugin(),
 	].filter(plugin => plugin !== false),
 };

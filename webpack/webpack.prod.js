@@ -6,21 +6,6 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = merge(common, {
 	mode: 'production',
-	module: {
-		rules: [
-			{
-				test: /\.(t|j)sx?$/i,
-				loader: 'babel-loader',
-				options: {
-					presets: [
-						'@babel/preset-env',
-						'@babel/preset-react',
-						'@babel/preset-typescript',
-					],
-				},
-			},
-		],
-	},
 	plugins: [
 		new webpack.optimize.SplitChunksPlugin(),
 		new webpack.optimize.AggressiveMergingPlugin(),

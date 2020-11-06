@@ -1,5 +1,3 @@
-# The year is 2020. This is our last line of defense
-# against robots, who have taken over humanity.
-
+# Wont let em bots get to admin
 User-agent: *
-Disallow: /
+Disallow: /admin

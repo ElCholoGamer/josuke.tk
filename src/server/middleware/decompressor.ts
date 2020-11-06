@@ -1,6 +1,6 @@
-import express from 'express';
+import { RequestHandler } from 'express';
 
-const decompressor: express.RequestHandler = (req, res, next) => {
+const decompressor: RequestHandler = (req, res, next) => {
 	req.url += '.gz';
 	res.setHeader('Content-Encoding', 'gzip');
 	next();

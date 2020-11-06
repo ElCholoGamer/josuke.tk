@@ -2,7 +2,7 @@ import React from 'react';
 import ToggleSwitch from '../ToggleSwitch';
 import './Setting.scss';
 
-interface Props<T extends object> {
+interface Props<T extends Record<string, any>> {
 	type: 'toggle' | 'text' | 'textarea';
 	name: keyof T;
 	setConfig: (config: T) => void;
@@ -13,7 +13,7 @@ interface Props<T extends object> {
 	maxLength?: number;
 }
 
-const Setting = <T extends object, _>({
+const Setting = <T extends Record<string, any>>({
 	name,
 	type,
 	setConfig,

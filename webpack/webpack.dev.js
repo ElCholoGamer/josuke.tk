@@ -29,8 +29,9 @@ module.exports = merge(common, {
 			'/': {
 				target: proxy,
 				secure,
-				bypass: ({ headers }) => {
-					if (headers.accept.includes('html')) return '/index.html';
+				bypass: ({ headers, path }) => {
+					if (headers.accept.includes('html') && !path.startsWith('/oauth'))
+						return '/index.html';
 				},
 			},
 		},

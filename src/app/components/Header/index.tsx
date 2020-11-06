@@ -18,20 +18,20 @@ const Header: React.FC<Props> = ({ user }) => {
 		document.title = 'Redirecting...';
 
 		const cookies = new Cookies();
+		const accessToken = cookies.get('access_token');
+
 		switch (e.currentTarget.name) {
 			case 'login':
 				window.localStorage.setItem('redirect', location.pathname);
 				window.location.href = '/oauth/login';
 				break;
 			case 'logout':
-				const token = cookies.get('access_token');
-
 				// Remove all cookies
 				cookies.remove('access_token');
 				cookies.remove('refresh_token');
 
 				// Revoke access token
-				fetch(`/oauth/revoke/${token}`, {
+				fetch(`/oauth/revoke/${accessToken}`, {
 					method: 'POST',
 				})
 					.then(() => window.location.reload())
@@ -69,7 +69,7 @@ const Header: React.FC<Props> = ({ user }) => {
 						<h3>{user.tag}</h3>
 						<img
 							className="user-avatar"
-							src={user.getAvatarURL({ size: 512 })}
+							src={user.getAvatarURL()}
 							alt="User avatar"
 						/>
 						<input

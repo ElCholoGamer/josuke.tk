@@ -1,5 +1,5 @@
 import express from 'express';
-import { asyncHandler, isAdmin } from '../utils';
+import { asyncHandler, isAdmin } from '../util/utils';
 import fetch from 'node-fetch';
 
 const router = express.Router();

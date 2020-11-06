@@ -1,7 +1,6 @@
 import express from 'express';
 import fetch from 'node-fetch';
-import { stringify } from 'querystring';
-import { asyncHandler } from '../utils';
+import { asyncHandler, stringify } from '../util/utils';
 
 const { CLIENT_ID, CLIENT_SECRET } = process.env;
 

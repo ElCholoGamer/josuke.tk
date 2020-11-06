@@ -4,3 +4,5 @@ server-prod/
 
 .env
 yarn-error.log
+.eslintrc.json
+.eslintignore
