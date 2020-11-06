@@ -2,7 +2,7 @@ import React from 'react';
 import Setting from 'components/Setting';
 import FileInfo from './FileInfo';
 import './Webhook.scss';
-import { debug } from 'src/app/utils';
+import { debug } from '../../utils';
 
 interface WebhookData {
 	url: string;
