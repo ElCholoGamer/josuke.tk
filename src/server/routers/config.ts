@@ -10,11 +10,10 @@ router.get(
 	'/:guildId',
 	asyncHandler(async (req, res) => {
 		const { guildId } = req.params;
-		if (!(await checkAdmin(req.query.authorization?.toString(), guildId))) {
+		if (!(await checkAdmin(req.query.authorization?.toString(), guildId)))
 			return res
 				.status(401)
 				.json({ status: 401, message: 'User is not an administrator' });
-		}
 
 		// Fetch guild name
 		const { name } = await (
@@ -28,11 +27,10 @@ router.get(
 				.status(404)
 				.json({ status: `Guild by ID "${guildId}" not found` });
 
-		const [
-			results,
-		] = (await asyncQuery('SELECT * FROM configs WHERE guild_id=?', [
-			guildId,
-		])) || [
+		const results = (await asyncQuery(
+			'SELECT * FROM configs WHERE guild_id=?',
+			[guildId]
+		)) || [
 			{
 				guildName: name,
 				prefix: 'jo! ',
