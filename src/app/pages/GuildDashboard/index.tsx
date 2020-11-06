@@ -93,7 +93,6 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			.finally(() => setSaveButtons(true));
 	};
 
-	console.log('Rendering normal stuff');
 	return (
 		<main className="dashboard-main">
 			<LinkedButton
@@ -151,7 +150,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 					Level-up message:
 				</Setting>
 				<SaveFooter
-					enabled={!compareObjects(config, prevConfig)}
+					enabled={!compareObjects(config || {}, prevConfig || {})}
 					buttonsEnabled={saveButtons}
 					onSave={handleClick}
 					onReset={() => setConfig(prevConfig)}

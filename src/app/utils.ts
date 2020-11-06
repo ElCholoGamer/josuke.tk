@@ -102,7 +102,6 @@ export const fetchUser = async (): Promise<User | null> => {
 	console.log('Access token:', accessToken);
 	if (!accessToken) return null;
 
-	// Fetch user data
 	try {
 		// Fetch user info
 		const res = await fetch('https://discordapp.com/api/users/@me', {
@@ -143,6 +142,8 @@ export const fetchUser = async (): Promise<User | null> => {
 };
 
 export const compareObjects = (obj1: any, obj2: any) => {
+	if (!obj1 || !obj2) return false;
+
 	const keys1 = Object.keys(obj1);
 	const keys2 = Object.keys(obj2);
 
