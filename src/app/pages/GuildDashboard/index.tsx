@@ -20,26 +20,24 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		let timeout: number | null = null;
 
 		const fetchConfig = async (accessToken: string) => {
-			let newConfig: Config | null = null;
 			try {
-				newConfig = await (
-					await fetch(`/api/config?guild_id=${guildId}`, {
-						headers: { Authorization: `Bearer ${accessToken}` },
-					})
-				).json();
+				const res = await fetch(`/api/config?guild_id=${guildId}`, {
+					headers: { Authorization: `Bearer ${accessToken}` },
+				});
+
+				const data = await res.json();
+				if (res.status === 200) {
+					setConfig(data);
+					setPrevConfig(data);
+				}
 			} catch (err) {
 				debug(err);
-			}
-
-			if (newConfig?.guildName) {
-				setConfig(newConfig);
-				setPrevConfig(newConfig);
-			} else {
+			} finally {
 				timeout = setTimeout(fetchConfig, 4000, accessToken);
 			}
 		};
 
-		if (!config && user) fetchConfig(user.accessToken).catch(debug);
+		if (!config && user && !timeout) fetchConfig(user.accessToken).catch(debug);
 
 		return () => {
 			if (timeout) clearTimeout(timeout);
@@ -62,9 +60,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		if (!prefix.length) {
 			alert('Cannot have an empty prefix!');
 			return;
-		}
-
-		if (!level_message.length && levels && send_level) {
+		} else if (!level_message.length && levels && send_level) {
 			alert('Cannot have an empty level-up message!');
 			return;
 		}
