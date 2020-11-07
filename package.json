@@ -6,7 +6,7 @@
 	"private": true,
 	"scripts": {
 		"build": "yarn build:server && yarn build:app",
-		"build:server": "tsc ./src/server/index.ts --esModuleInterop --skipLibCheck --outDir ./src/server-prod/",
+		"build:server": "tsc ./src/server/index.ts --resolveJsonModule --esModuleInterop --skipLibCheck --outDir ./src/server-prod/",
 		"build:app": "webpack --config ./webpack/webpack.prod.js",
 		"start": "webpack serve --config ./webpack/webpack.dev.js",
 		"serve:dev": "ts-node-dev --transpile-only --rs --respawn ./src/server/index.ts -d",
@@ -82,5 +82,8 @@
 		"webpack-dev-server": "^3.11.0",
 		"webpack-merge": "^5.3.0"
 	},
-	"proxy": "http://localhost/"
+	"proxy": "http://localhost/",
+	"engines": {
+		"node": "14.x.x"
+	}
 }
