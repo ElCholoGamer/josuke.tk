@@ -5,8 +5,11 @@ import { PORT } from './enviroment';
 import config from '../../config.json';
 
 const dblWebhook = (token: string | undefined, server: http.Server) => {
-	if (!token) return;
 	console.log('Connecting to DBL webhook...');
+	if (!token) {
+		console.log('No DBL token available');
+		return;
+	}
 
 	const dbl = new DBL(token, {
 		webhookServer: server,
@@ -14,7 +17,6 @@ const dblWebhook = (token: string | undefined, server: http.Server) => {
 		webhookPort: PORT,
 	});
 
-	dbl.on('posted', () => console.log("This should't log lol"));
 	dbl.on('error', err => console.error('An error occurred with DBL!', err));
 
 	const { webhook } = dbl;
