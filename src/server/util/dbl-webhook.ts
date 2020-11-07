@@ -2,7 +2,7 @@ import DBL from 'dblapi.js';
 import http from 'http';
 import { asyncQuery } from './db';
 import { PORT } from './enviroment';
-import config from '../../config.json';
+import config from '../config.json';
 
 const dblWebhook = (token: string | undefined, server: http.Server) => {
 	console.log('Connecting to DBL webhook...');
