@@ -16,6 +16,6 @@ export const asyncHandler = (handler: RequestHandler): RequestHandler => async (
 };
 
 export const stringify = (o: any) =>
-	Object.keys(o)
-		.map(key => `${key}=${o[key]}`)
+	Object.entries(o)
+		.map(([key, value]) => `${key}=${value}`)
 		.join('&');
