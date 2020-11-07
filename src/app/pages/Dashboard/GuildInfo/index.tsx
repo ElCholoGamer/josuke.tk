@@ -30,7 +30,7 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 
 		const { protocol, hostname } = window.location;
 		const win = window.open(
-			`/bot/invite?${stringify({
+			`/oauth/invite?${stringify({
 				response_type: 'code',
 				redirect_uri: `${protocol}//${hostname}/close`,
 				guild_id: guild.id,

@@ -48,7 +48,7 @@ const Home: React.FC = () => {
 			</div>
 			<LinkedButton
 				style={{ width: '200px', height: '70px', margin: '50px' }}
-				to="/bot/invite"
+				to="/oauth/invite"
 				external
 				newTab>
 				Invite Josuke to Your Server!

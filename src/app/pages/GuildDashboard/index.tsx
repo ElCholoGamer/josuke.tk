@@ -24,7 +24,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			try {
 				newConfig = await (
 					await fetch(
-						`/config/${guildId}?authorization=${encodeURIComponent(
+						`/api/config/${guildId}?authorization=${encodeURIComponent(
 							`Bearer ${accessToken}`
 						)}`
 					)
@@ -64,7 +64,9 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		if (!prefix.length) {
 			alert('Cannot have an empty prefix!');
 			return;
-		} else if (!level_message.length && levels && send_level) {
+		}
+
+		if (!level_message.length && levels && send_level) {
 			alert('Cannot have an empty level-up message!');
 			return;
 		}
@@ -74,7 +76,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 
 		// Update config
 		fetch(
-			`/config/${guildId}?authorization=${encodeURIComponent(
+			`/api/config/${guildId}?authorization=${encodeURIComponent(
 				`Bearer ${user.accessToken}`
 			)}`,
 			{
@@ -84,9 +86,8 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			}
 		)
 			.then(res => {
-				if (res.status === 200) {
-					setPrevConfig(config);
-				} else debug('Failed to save config:', res);
+				if (res.status === 200) setPrevConfig(config);
+				else debug('Failed to save config:', res);
 			})
 			.catch(debug)
 			.finally(() => setSaveButtons(true));
