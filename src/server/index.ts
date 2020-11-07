@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
@@ -6,22 +5,14 @@ import morgan from 'morgan';
 import apiRouter from './routers/api';
 import closeRouter from './routers/close';
 import oauthRouter from './routers/oauth';
-import botRouter from './routers/bot';
-import configRouter from './routers/config';
 import decompressor from './middleware/decompressor';
 import { connectDatabase } from './util/db';
 import errorHandler from './middleware/error-handler';
-dotenv.config();
-
-process.env.NODE_ENV = process.argv.includes('-d')
-	? 'development'
-	: 'production';
-
-process.env.HEROKU =
-	(process.env._ || '').indexOf('heroku') !== -1 ? 'true' : 'false';
+import env from './util/enviroment';
+import { stringify } from './util/utils';
 
 const app = express();
-const { PORT = 80 } = process.env;
+const { PORT = 80 } = env;
 
 // Settings
 app.set('json spaces', 2);
@@ -34,8 +25,8 @@ app.use(express.static(path.join(__dirname, '..', 'app', 'assets')));
 
 // General middleware
 app.use(express.json(), cors());
-if (process.env.HEROKU === 'false') app.use(morgan('dev'));
 app.use('*.js', decompressor);
+if (env.HEROKU === 'false') app.use(morgan('dev'));
 
 // Connect to database
 connectDatabase()
@@ -44,15 +35,19 @@ connectDatabase()
 
 		// Routes
 		app.use('/api', apiRouter);
-		app.use('/config', configRouter);
 		app.use('/oauth', oauthRouter);
-		app.use('/bot', botRouter);
 		app.use('/close', closeRouter);
 
-		// React app
-		if (process.env.NODE_ENV === 'production') {
+		if (env.NODE_ENV === 'production') {
 			app.get('*', (req, res) => {
 				res.status(200).sendFile(path.join(BUILD_PATH, 'index.html'));
+			});
+		} else {
+			// Development login redirect
+			app.get('/', (req, res) => {
+				res
+					.status(200)
+					.redirect(`http://localhost:3000/?${stringify(req.query)}`);
 			});
 		}
 

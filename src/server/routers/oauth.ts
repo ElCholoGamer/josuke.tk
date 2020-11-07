@@ -1,8 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import { asyncHandler, stringify } from '../util/utils';
-
-const { CLIENT_ID, CLIENT_SECRET } = process.env;
+import env from '../util/enviroment';
 
 const router = express.Router();
 
@@ -10,13 +9,13 @@ const OAuthScope = ['guilds', 'identify'].join(' ');
 const OauthQuery = {
 	scope: OAuthScope,
 	response_type: 'code',
-	client_id: CLIENT_ID,
+	client_id: env.CLIENT_ID,
 };
 
 // Login redirect
 router.get('/login', (req, res) => {
 	const { protocol, hostname, baseUrl } = req;
-	res.redirect(
+	res.status(200).redirect(
 		`https://discord.com/api/oauth2/authorize?${stringify({
 			...OauthQuery,
 			redirect_uri: `${protocol}://${hostname}${baseUrl}/callback`,
@@ -45,8 +44,8 @@ router.get(
 				method: 'POST',
 				body: stringify({
 					redirect_uri,
-					client_id: CLIENT_ID,
-					client_secret: CLIENT_SECRET,
+					client_id: env.CLIENT_ID,
+					client_secret: env.CLIENT_SECRET,
 					code: code.toString(),
 					grant_type: 'authorization_code',
 				}),
@@ -61,7 +60,7 @@ router.get(
 			});
 		}
 
-		res.redirect(
+		res.status(200).redirect(
 			`/?${stringify({
 				access_token,
 				refresh_token,
@@ -75,7 +74,7 @@ router.get(
 router.get(
 	'/refresh/:token',
 	asyncHandler(async (req, res) => {
-		const { token } = req.params;
+		const { params, protocol, hostname, path } = req;
 
 		const json = await (
 			await fetch(
@@ -86,18 +85,18 @@ router.get(
 						'Content-Type': 'application/x-www-form-urlencoded',
 					},
 					body: stringify({
-						client_id: CLIENT_ID,
-						client_secret: CLIENT_SECRET,
-						redirect_uri: `${req.protocol}://${req.hostname}${req.path}`,
+						client_id: env.CLIENT_ID,
+						client_secret: env.CLIENT_SECRET,
+						redirect_uri: `${protocol}://${hostname}${path}`,
 						grant_type: 'refresh_token',
-						refresh_token: token,
+						refresh_token: params.token,
 						scope: OAuthScope,
 					}),
 				}
 			)
 		).json();
 
-		res.json(json);
+		res.status(200).json(json);
 	})
 );
 
@@ -105,23 +104,34 @@ router.get(
 router.post(
 	'/revoke/:token',
 	asyncHandler(async (req, res) => {
-		const { token } = req.params;
-		res.status(200).json(
-			await (
-				await fetch('https://discordapp.com/api/oauth2/token/revoke', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					body: stringify({
-						client_id: CLIENT_ID,
-						client_secret: CLIENT_SECRET,
-						token,
-					}),
-				})
-			).json()
-		);
+		const response = await (
+			await fetch('https://discordapp.com/api/oauth2/token/revoke', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: stringify({
+					client_id: env.CLIENT_ID,
+					client_secret: env.CLIENT_SECRET,
+					token: req.params.token,
+				}),
+			})
+		).json();
+
+		res.status(200).json(response);
 	})
 );
+
+// Invite bot
+router.get('/invite', (req, res) => {
+	res.status(200).redirect(
+		`https://discord.com/api/oauth2/authorize?${stringify({
+			client_id: env.CLIENT_ID,
+			permissions: 280095814,
+			scope: 'bot',
+			...req.query,
+		})}`
+	);
+});
 
 export default router;
