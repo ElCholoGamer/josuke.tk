@@ -1,6 +1,7 @@
-import mysql from 'mysql';
+import mysql from 'mysql2';
+import { env } from 'process';
 
-const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
+const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = env;
 const db = mysql.createConnection({
 	host: DB_HOST,
 	port: 3306,
@@ -14,17 +15,21 @@ export const connectDatabase = (): Promise<void> =>
 	new Promise((resolve, reject) => {
 		console.log('Connecting to database...');
 		db.connect(err => {
-			if (err) reject(err.sqlMessage);
+			if (err) reject(err.message);
 			else resolve();
 		});
 	});
 
-export const asyncQuery = (
-	options: string | mysql.QueryOptions,
-	values?: any
-): Promise<any> =>
+type QueryResult =
+	| mysql.RowDataPacket[]
+	| mysql.RowDataPacket[][]
+	| mysql.OkPacket
+	| mysql.OkPacket[]
+	| mysql.ResultSetHeader;
+
+export const asyncQuery = (sql: string, values?: any): Promise<QueryResult> =>
 	new Promise((resolve, reject) =>
-		db.query(options, values, (err, results) => {
+		db.query(sql, values, (err, results) => {
 			if (err) reject(err);
 			else resolve(results);
 		})
