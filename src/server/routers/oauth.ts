@@ -1,7 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import { asyncHandler, stringify } from '../util/utils';
-import env from '../util/enviroment';
+import { CLIENT_ID, CLIENT_SECRET } from '../util/enviroment';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const OAuthScope = ['guilds', 'identify'].join(' ');
 const OauthQuery = {
 	scope: OAuthScope,
 	response_type: 'code',
-	client_id: env.CLIENT_ID,
+	client_id: CLIENT_ID,
 };
 
 // Login redirect
@@ -44,8 +44,8 @@ router.get(
 				method: 'POST',
 				body: stringify({
 					redirect_uri,
-					client_id: env.CLIENT_ID,
-					client_secret: env.CLIENT_SECRET,
+					client_id: CLIENT_ID,
+					client_secret: CLIENT_SECRET,
 					code: code.toString(),
 					grant_type: 'authorization_code',
 				}),
@@ -85,8 +85,8 @@ router.get(
 						'Content-Type': 'application/x-www-form-urlencoded',
 					},
 					body: stringify({
-						client_id: env.CLIENT_ID,
-						client_secret: env.CLIENT_SECRET,
+						client_id: CLIENT_ID,
+						client_secret: CLIENT_SECRET,
 						redirect_uri: `${protocol}://${hostname}${path}`,
 						grant_type: 'refresh_token',
 						refresh_token: params.token,
@@ -111,8 +111,8 @@ router.post(
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: stringify({
-					client_id: env.CLIENT_ID,
-					client_secret: env.CLIENT_SECRET,
+					client_id: CLIENT_ID,
+					client_secret: CLIENT_SECRET,
 					token: req.params.token,
 				}),
 			})
@@ -126,7 +126,7 @@ router.post(
 router.get('/invite', (req, res) => {
 	res.status(200).redirect(
 		`https://discord.com/api/oauth2/authorize?${stringify({
-			client_id: env.CLIENT_ID,
+			client_id: CLIENT_ID,
 			permissions: 280095814,
 			scope: 'bot',
 			...req.query,

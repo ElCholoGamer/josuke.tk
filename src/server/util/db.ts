@@ -1,24 +1,20 @@
 import mysql from 'mysql2';
-import { env } from 'process';
+import { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } from './enviroment';
 
-const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = env;
-const db = mysql.createConnection({
+const db = mysql.createPool({
 	host: DB_HOST,
 	port: 3306,
 	user: DB_USER,
 	password: DB_PASSWORD,
 	database: DB_NAME,
 	supportBigNumbers: true,
+	connectionLimit: 10,
 });
 
-export const connectDatabase = (): Promise<void> =>
-	new Promise((resolve, reject) => {
-		console.log('Connecting to database...');
-		db.connect(err => {
-			if (err) reject(err.message);
-			else resolve();
-		});
-	});
+export const connectDatabase = async (): Promise<void> => {
+	console.log('Connecting to database...');
+	await asyncQuery('SELECT 1 + 1 AS result');
+};
 
 type QueryResult =
 	| mysql.RowDataPacket[]
