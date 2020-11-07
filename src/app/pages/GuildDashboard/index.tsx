@@ -23,11 +23,9 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			let newConfig: Config | null = null;
 			try {
 				newConfig = await (
-					await fetch(
-						`/api/config/${guildId}?authorization=${encodeURIComponent(
-							`Bearer ${accessToken}`
-						)}`
-					)
+					await fetch(`/api/config?guild_id=${guildId}`, {
+						headers: { Authorization: `Bearer ${accessToken}` },
+					})
 				).json();
 			} catch (err) {
 				debug(err);
@@ -37,7 +35,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 				setConfig(newConfig);
 				setPrevConfig(newConfig);
 			} else {
-				timeout = setTimeout(fetchConfig, 2000, accessToken);
+				timeout = setTimeout(fetchConfig, 4000, accessToken);
 			}
 		};
 
@@ -75,16 +73,14 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		setSaveButtons(false);
 
 		// Update config
-		fetch(
-			`/api/config/${guildId}?authorization=${encodeURIComponent(
-				`Bearer ${user.accessToken}`
-			)}`,
-			{
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(config),
-			}
-		)
+		fetch(`/api/config?guild_id=${guildId}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${user.accessToken}`,
+			},
+			body: JSON.stringify(config),
+		})
 			.then(res => {
 				if (res.status === 200) setPrevConfig(config);
 				else debug('Failed to save config:', res);

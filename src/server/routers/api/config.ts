@@ -9,10 +9,10 @@ router.use(configAuth);
 
 // Get the settings for a guild ID
 router.get(
-	'/:guildId',
+	'/',
 	asyncHandler(async (req, res) => {
 		const {
-			params: { guildId },
+			query: { guild_id },
 			headers: { guildName },
 		} = req;
 
@@ -23,7 +23,7 @@ router.get(
 			});
 
 		const config = (
-			await asyncQuery('SELECT * FROM configs WHERE guild_id=?', [guildId])
+			await asyncQuery('SELECT * FROM configs WHERE guild_id=?', [guild_id])
 		)[0] || {
 			prefix: 'jo! ',
 			snipe: true,
@@ -47,22 +47,23 @@ router.get(
 
 // Update the settings for a guild ID
 router.put(
-	'/:guildId',
+	'/',
 	asyncHandler(async (req, res) => {
 		const {
-			params: { guildId },
+			query: { guild_id },
 		} = req;
 
 		// Upsert data into table
-		const { prefix, snipe, levels, level_message, send_level } = req.body;
-		if (!prefix || !snipe || !levels || !level_message || !send_level)
-			return res.status(400).json({
-				status: 400,
-				message: 'Missing at least one request value in request body',
-			});
+		const {
+			prefix = 'jo! ',
+			snipe = true,
+			levels = true,
+			level_message,
+			send_level = true,
+		} = req.body;
 
 		const params = [
-			guildId,
+			guild_id,
 			prefix,
 			+snipe,
 			+levels,
