@@ -1,8 +1,14 @@
 import express from 'express';
-import { asyncHandler, isAdmin } from '../util/utils';
+import { asyncHandler, isAdmin } from '../../util/utils';
 import fetch from 'node-fetch';
+import { env } from 'process';
+import admin from './admin';
+import config from './config';
 
 const router = express.Router();
+
+router.use('/admin', admin);
+router.use('/config', config);
 
 router.get(
 	'/guilds/:accessToken',
@@ -10,7 +16,7 @@ router.get(
 		// Fetch bot guilds
 		const botGuilds = await (
 			await fetch(`https://discordapp.com/api/users/@me/guilds`, {
-				headers: { Authorization: `Bot ${process.env.BOT_TOKEN}` },
+				headers: { Authorization: `Bot ${env.BOT_TOKEN}` },
 			})
 		).json();
 
