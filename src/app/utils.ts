@@ -60,15 +60,15 @@ export interface Config {
 export const fetchUser = async (): Promise<User | null> => {
 	const cookies = new Cookies();
 
-	let accessToken = cookies.get('access_token');
-	let refreshToken = cookies.get('refresh_token');
+	let accessToken: string | undefined = cookies.get('access_token');
+	let refreshToken: string | undefined = cookies.get('refresh_token');
 
 	if (!accessToken && refreshToken) {
 		// Refresh access token
 		try {
-			const res = await (await fetch(`/oauth/refresh/${refreshToken}`)).json();
-			if (res.access_token) {
-				const { access_token, refresh_token, expires_in } = res;
+			const res = await fetch(`/oauth/refresh/${refreshToken}`);
+			if (res.status === 200) {
+				const { access_token, refresh_token, expires_in } = await res.json();
 				const cookies = new Cookies();
 
 				// Remove existing cookies
