@@ -17,12 +17,14 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 	const { guildId } = useParams<{ guildId: string }>();
 
 	React.useEffect(() => {
-		let timeout: number | null = null;
+		let timeout: NodeJS.Timeout | null = null;
 
-		const fetchConfig = async (accessToken: string) => {
+		const fetchConfig = async () => {
+			if (!user) return;
+
 			try {
 				const res = await fetch(`/api/config?guild_id=${guildId}`, {
-					headers: { Authorization: `Bearer ${accessToken}` },
+					headers: { Authorization: `Bearer ${user.accessToken}` },
 				});
 
 				const data = await res.json();
@@ -32,12 +34,11 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 				}
 			} catch (err) {
 				debug(err);
-			} finally {
-				timeout = setTimeout(fetchConfig, 4000, accessToken);
+				timeout = setTimeout(fetchConfig, 4000);
 			}
 		};
 
-		if (!config && user && !timeout) fetchConfig(user.accessToken).catch(debug);
+		if (!config && user && !timeout) fetchConfig().catch(debug);
 
 		return () => {
 			if (timeout) clearTimeout(timeout);
