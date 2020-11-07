@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import React from 'react';
-import config from './config.json';
+import config from '../config.json';
 
 /**
  * Returns the query parameters for

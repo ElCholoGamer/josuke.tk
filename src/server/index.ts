@@ -10,8 +10,11 @@ import { connectDatabase } from './util/db';
 import errorHandler from './middleware/error-handler';
 import { PORT, HEROKU, NODE_ENV } from './util/enviroment';
 import { stringify } from './util/utils';
+import http from 'http';
+import dblWebhook from './util/dbl-webhook';
 
 const app = express();
+const server = http.createServer(app);
 
 // Settings
 app.set('json spaces', 2);
@@ -29,8 +32,9 @@ if (HEROKU === 'false') app.use(morgan('dev'));
 
 // Connect to database
 connectDatabase()
-	.then(() => {
+	.then(async () => {
 		console.log('Database connected!');
+		dblWebhook(process.env.DBL_TOKEN, server);
 
 		// Routes
 		app.use('/api', apiRouter);
@@ -51,8 +55,7 @@ connectDatabase()
 		}
 
 		app.use(errorHandler);
+
+		server.listen(PORT, () => console.log(`App listening on port ${PORT}...`));
 	})
 	.catch(console.error);
-
-// Listening
-app.listen(PORT, () => console.log(`App listening on port ${PORT}...`));
