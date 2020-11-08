@@ -1,33 +1,24 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
-import DBL from 'dblapi.js';
-import http from 'http';
-import { asyncExecute } from './db';
-import { ADMIN_PASSWORD, PORT } from './enviroment';
+import express from 'express';
+import { asyncExecute } from '../util/db';
+import { ADMIN_PASSWORD, DBL_TOKEN } from '../util/enviroment';
+import { asyncHandler } from '../util/utils';
 import config from '../config.json';
-import fetch from 'node-fetch';
 
-const dblWebhook = (token: string | undefined, server: http.Server) => {
-	console.log('Connecting to DBL webhook...');
-	if (!token) {
-		console.log('No DBL token available');
-		return;
-	}
+const router = express.Router();
 
-	const dbl = new DBL(token, {
-		webhookServer: server,
-		webhookAuth: token,
-		webhookPort: PORT,
-	});
+router.post(
+	'/',
+	asyncHandler(async (req, res) => {
+		const { authorization } = req.headers;
+		if (authorization !== DBL_TOKEN)
+			return res.status(403).json({
+				status: 403,
+				message: 'Invalid "Authorization" headr in request',
+			});
 
-	dbl.on('error', err => console.error('An error occurred with DBL!', err));
-
-	const { webhook } = dbl;
-	webhook.on('ready', ({ port, path, hostname }) =>
-		console.log(`DBL webhook listening at ${hostname}:${port}${path}...`)
-	);
-
-	webhook.on('vote', async ({ user, isWeekend, type }) => {
+		const { user, isWeekend, type } = req.body;
 		console.log(`User ID ${user} just voted!`);
 
 		if (type !== 'test') {
@@ -48,12 +39,12 @@ const dblWebhook = (token: string | undefined, server: http.Server) => {
 			).catch(console.error);
 		}
 
-		const res = await fetch(`https://discordapp.com/api/users/${user}`);
+		const response = await fetch(`https://discordapp.com/api/users/${user}`);
 		const title =
-			res.status !== 200
+			response.status !== 200
 				? `User ID ${user} just voted!`
 				: await (async () => {
-						const { username, discriminator } = await res.json();
+						const { username, discriminator } = await response.json();
 						return `${username}#${discriminator}`;
 				  })();
 
@@ -64,7 +55,12 @@ const dblWebhook = (token: string | undefined, server: http.Server) => {
 				title,
 			}),
 		});
-	});
-};
 
-export default dblWebhook;
+		res.status(200).json({
+			status: 200,
+			message: 'Vote received',
+		});
+	})
+);
+
+export default router;

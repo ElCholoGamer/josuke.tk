@@ -11,7 +11,7 @@ import errorHandler from './middleware/error-handler';
 import { PORT, HEROKU, NODE_ENV } from './util/enviroment';
 import { stringify } from './util/utils';
 import http from 'http';
-import dblWebhook from './util/dbl-webhook';
+import dblWebhook from './routers/dbl-webhook';
 
 const app = express();
 const server = http.createServer(app);
@@ -34,12 +34,12 @@ if (HEROKU === 'false') app.use(morgan('dev'));
 connectDatabase()
 	.then(async () => {
 		console.log('Database connected!');
-		dblWebhook(process.env.DBL_TOKEN, server);
 
 		// Routes
 		app.use('/api', apiRouter);
 		app.use('/oauth', oauthRouter);
 		app.use('/close', closeRouter);
+		app.use('/dblwebhook', dblWebhook);
 
 		if (NODE_ENV === 'production') {
 			app.get('*', (req, res) => {
