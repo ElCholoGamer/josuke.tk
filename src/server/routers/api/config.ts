@@ -18,8 +18,8 @@ router.get(
 
 		// Check guild name exists
 		if (!guildName)
-			return res.status(401).json({
-				status: 401,
+			return res.status(403).json({
+				status: 403,
 				message: 'User is not an administrator or guild does not exist.',
 			});
 
