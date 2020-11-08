@@ -2,8 +2,8 @@
 /* eslint-disable indent */
 import express from 'express';
 import { asyncExecute } from '../util/db';
-import { ADMIN_PASSWORD, DBL_TOKEN } from '../util/enviroment';
-import { asyncHandler } from '../util/utils';
+import { DBL_TOKEN } from '../util/enviroment';
+import { asyncHandler, notify } from '../util/utils';
 import config from '../config.json';
 import fetch from 'node-fetch';
 
@@ -47,7 +47,7 @@ router.post(
 			).catch(console.error);
 		}
 
-		const response = await fetch(`https://discordapp.com/api/users/${user}`);
+		const response = await fetch(`https://discord.com/api/users/${user}`);
 		const title =
 			response.status !== 200
 				? `User ID ${user} just voted!`
@@ -56,13 +56,7 @@ router.post(
 						return `${username}#${discriminator}`;
 				  })();
 
-		fetch('/api/admin/notify', {
-			method: 'POST',
-			headers: { Authorization: ADMIN_PASSWORD },
-			body: JSON.stringify({
-				title,
-			}),
-		});
+		await notify(title);
 
 		res.status(200).json({
 			status: 200,

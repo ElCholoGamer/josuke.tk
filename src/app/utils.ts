@@ -104,7 +104,7 @@ export const fetchUser = async (): Promise<User | null> => {
 
 	try {
 		// Fetch user info
-		const res = await fetch('https://discordapp.com/api/users/@me', {
+		const res = await fetch('https://discord.com/api/users/@me', {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});
 
@@ -129,8 +129,8 @@ export const fetchUser = async (): Promise<User | null> => {
 			getAvatarURL(options = {}) {
 				const { size = 128, format = 'png' } = options;
 				return avatar
-					? `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=${size}`
-					: `https://cdn.discordapp.com/embed/avatars/${
+					? `https://cdn.discord.com/avatars/${id}/${avatar}.${format}?size=${size}`
+					: `https://cdn.discord.com/embed/avatars/${
 							discriminator % 5
 					  }.${format}`;
 			},

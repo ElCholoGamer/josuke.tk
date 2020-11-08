@@ -40,7 +40,7 @@ router.get(
 		const redirect_uri = `${protocol}://${hostname}${baseUrl}${path}`;
 
 		const response = await (
-			await fetch('https://discordapp.com/api/oauth2/token', {
+			await fetch('https://discord.com/api/oauth2/token', {
 				method: 'POST',
 				body: stringify({
 					redirect_uri,
@@ -105,7 +105,7 @@ router.post(
 	'/revoke/:token',
 	asyncHandler(async (req, res) => {
 		const response = await (
-			await fetch('https://discordapp.com/api/oauth2/token/revoke', {
+			await fetch('https://discord.com/api/oauth2/token/revoke', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',

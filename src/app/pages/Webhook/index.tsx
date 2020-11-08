@@ -92,7 +92,7 @@ const Webhook: React.FC = () => {
 				<input
 					name="url"
 					type="text"
-					placeholder="https://discordapp.com/api/webhooks/"
+					placeholder="https://discord.com/api/webhooks/"
 					value={data.url}
 					onChange={handleChange}
 				/>

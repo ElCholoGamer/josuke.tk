@@ -22,7 +22,7 @@ const configAuth: RequestHandler = asyncHandler(async (req, res, next) => {
 
 	// Get user guilds
 	const guilds: any[] = await (
-		await fetch('https://discordapp.com/api/users/@me/guilds', {
+		await fetch('https://discord.com/api/users/@me/guilds', {
 			headers: { Authorization: authorization },
 		})
 	).json();

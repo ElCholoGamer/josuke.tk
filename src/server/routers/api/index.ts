@@ -15,7 +15,7 @@ router.get(
 	asyncHandler(async (req, res) => {
 		// Fetch bot guilds
 		const botGuilds = await (
-			await fetch(`https://discordapp.com/api/users/@me/guilds`, {
+			await fetch(`https://discord.com/api/users/@me/guilds`, {
 				headers: { Authorization: `Bot ${BOT_TOKEN}` },
 			})
 		).json();
@@ -24,7 +24,7 @@ router.get(
 		res.status(200).json(
 			(
 				await (
-					await fetch('https://discordapp.com/api/users/@me/guilds', {
+					await fetch('https://discord.com/api/users/@me/guilds', {
 						headers: { Authorization: `Bearer ${req.params.accessToken}` },
 					})
 				).json()
