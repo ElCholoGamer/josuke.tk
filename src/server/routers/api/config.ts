@@ -1,5 +1,5 @@
 import express from 'express';
-import { asyncQuery } from '../../util/db';
+import { asyncExecute } from '../../util/db';
 import { asyncHandler } from '../../util/utils';
 import configAuth from '../../middleware/config-auth';
 
@@ -16,14 +16,16 @@ router.get(
 			headers: { guildName },
 		} = req;
 
+		// Check guild name exists
 		if (!guildName)
 			return res.status(401).json({
 				status: 401,
 				message: 'User is not an administrator or guild does not exist.',
 			});
 
+		// Get config from database
 		const config = (
-			await asyncQuery('SELECT * FROM configs WHERE guild_id=?', [guild_id])
+			await asyncExecute('SELECT * FROM configs WHERE guild_id=?', [guild_id])
 		)[0] || {
 			prefix: 'jo! ',
 			snipe: true,
@@ -32,8 +34,8 @@ router.get(
 			level_message: 'Congratulations, {user}, you have reached level {lvl}!',
 		};
 
+		// Send response
 		const { prefix, snipe, levels, send_level, level_message } = config;
-
 		res.status(200).json({
 			guildName,
 			prefix,
@@ -53,7 +55,7 @@ router.put(
 			query: { guild_id },
 		} = req;
 
-		// Upsert data into table
+		// Get data with defaults
 		const {
 			prefix = 'jo! ',
 			snipe = true,
@@ -62,6 +64,7 @@ router.put(
 			send_level = true,
 		} = req.body;
 
+		// Create query params
 		const params = [
 			guild_id,
 			prefix,
@@ -71,13 +74,13 @@ router.put(
 			level_message,
 		];
 
-		await asyncQuery(
+		// Upsert data and send response
+		await asyncExecute(
 			'INSERT INTO configs (guild_id,prefix,snipe,levels,send_level,level_message) VALUES (?,?,?,?,?,?) ' +
 				'ON DUPLICATE KEY UPDATE guild_id=?, prefix=?, snipe=?, levels=?,send_level=?,level_message=?',
 			[...params, ...params]
 		);
-
-		res.status(200).json({ status: 200, config: params });
+		res.status(200).json({ status: 200, new_config: params });
 	})
 );
 

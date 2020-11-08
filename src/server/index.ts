@@ -6,7 +6,7 @@ import apiRouter from './routers/api';
 import closeRouter from './routers/close';
 import oauthRouter from './routers/oauth';
 import decompressor from './middleware/decompressor';
-import { asyncQuery, connectDatabase } from './util/db';
+import { connectDatabase } from './util/db';
 import errorHandler from './middleware/error-handler';
 import { PORT, HEROKU, NODE_ENV } from './util/enviroment';
 import { stringify } from './util/utils';
