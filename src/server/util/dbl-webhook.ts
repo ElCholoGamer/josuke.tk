@@ -1,16 +1,11 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
 import DBL from 'dblapi.js';
 import http from 'http';
 import { asyncExecute } from './db';
-import {
-	PORT,
-	VAPID_PRIVATE_KEY,
-	VAPID_PUBLIC_KEY,
-	VAPID_SUBJECT,
-} from './enviroment';
+import { ADMIN_PASSWORD, PORT } from './enviroment';
 import config from '../config.json';
-import webpush from 'web-push';
-
-webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+import fetch from 'node-fetch';
 
 const dblWebhook = (token: string | undefined, server: http.Server) => {
 	console.log('Connecting to DBL webhook...');
@@ -53,23 +48,22 @@ const dblWebhook = (token: string | undefined, server: http.Server) => {
 			).catch(console.error);
 		}
 
-		const subscriptions = await asyncExecute(
-			'SELECT * FROM push_subscriptions'
-		);
+		const res = await fetch(`https://discordapp.com/api/users/${user}`);
+		const title =
+			res.status !== 200
+				? `User ID ${user} just voted!`
+				: await (async () => {
+						const { username, discriminator } = await res.json();
+						return `${username}#${discriminator}`;
+				  })();
 
-		await Promise.all(
-			subscriptions.map(async row =>
-				webpush.sendNotification(
-					row.subscription,
-					JSON.stringify({
-						title: `User ID ${user} just voted!`,
-						options: {
-							body: 'Check it out!',
-						},
-					})
-				)
-			)
-		).catch(console.error);
+		fetch('/api/admin/notify', {
+			method: 'POST',
+			headers: { Authorization: ADMIN_PASSWORD },
+			body: JSON.stringify({
+				title,
+			}),
+		});
 	});
 };
 
