@@ -16,10 +16,10 @@ router.post(
 		if (authorization !== DBL_TOKEN)
 			return res.status(403).json({
 				status: 403,
-				message: 'Invalid "Authorization" headr in request',
+				message: 'Invalid "Authorization" header in request',
 			});
 
-		const { user, isWeekend = false, type } = req.body;
+		const { user, isWeekend = false, type = 'test' } = req.body;
 		if (!user)
 			return res.status(400).json({
 				status: 400,
