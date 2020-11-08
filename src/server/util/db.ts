@@ -16,18 +16,21 @@ export const connectDatabase = async (): Promise<void> => {
 	await asyncQuery('SELECT 1 + 1 AS result');
 };
 
-type QueryResult =
-	| mysql.RowDataPacket[]
-	| mysql.RowDataPacket[][]
-	| mysql.OkPacket
-	| mysql.OkPacket[]
-	| mysql.ResultSetHeader;
+type QueryResult = mysql.RowDataPacket[];
+
+export const asyncExecute = (sql: string, values?: any): Promise<QueryResult> =>
+	new Promise((resolve, reject) =>
+		db.execute(sql, values, (err, results) => {
+			if (err) reject(err);
+			else resolve(results as QueryResult);
+		})
+	);
 
 export const asyncQuery = (sql: string, values?: any): Promise<QueryResult> =>
 	new Promise((resolve, reject) =>
 		db.query(sql, values, (err, results) => {
 			if (err) reject(err);
-			else resolve(results);
+			else resolve(results as QueryResult);
 		})
 	);
 

@@ -15,4 +15,6 @@ export const {
 	VAPID_SUBJECT,
 	VAPID_PUBLIC_KEY,
 	VAPID_PRIVATE_KEY,
+	ADMIN_PASSWORD,
+	DBL_TOKEN,
 } = process.env;
