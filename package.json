@@ -16,6 +16,7 @@
 		"git": "yarn lint && git add ."
 	},
 	"dependencies": {
+		"axios": "^0.21.0",
 		"cors": "^2.8.5",
 		"crypto": "^1.0.1",
 		"dotenv": "^8.2.0",

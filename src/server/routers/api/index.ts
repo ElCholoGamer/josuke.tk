@@ -1,9 +1,9 @@
 import express from 'express';
 import { asyncHandler, isAdmin } from '../../util/utils';
-import fetch from 'node-fetch';
 import admin from './admin';
 import config from './config';
 import { BOT_TOKEN } from '../../util/enviroment';
+import axios from 'axios';
 
 const router = express.Router();
 
@@ -14,21 +14,21 @@ router.get(
 	'/guilds/:accessToken',
 	asyncHandler(async (req, res) => {
 		// Fetch bot guilds
-		const botGuilds = await (
-			await fetch(`https://discord.com/api/users/@me/guilds`, {
+		const { data: botGuilds } = await axios.get(
+			'https://discord.com/api/users/@me/guilds',
+			{
 				headers: { Authorization: `Bot ${BOT_TOKEN}` },
-			})
-		).json();
+			}
+		);
 
 		// Return user guilds with admin and bot data
+		const {
+			data: userGuilds,
+		} = await axios.get('https://discord.com/api/users/@me/guilds', {
+			headers: { Authorization: `Bearer ${req.params.accessToken}` },
+		});
 		res.status(200).json(
-			(
-				await (
-					await fetch('https://discord.com/api/users/@me/guilds', {
-						headers: { Authorization: `Bearer ${req.params.accessToken}` },
-					})
-				).json()
-			).map((guild: any) => ({
+			userGuilds.map((guild: any) => ({
 				...guild,
 				admin: isAdmin(guild.permissions),
 				botAvailable: botGuilds.some(

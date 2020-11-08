@@ -51,7 +51,7 @@ const Header: React.FC<Props> = ({ user }) => {
 				<nav>
 					<NavButton label="Home" to="/" />
 					{user && <NavButton label="My Servers" to="/dashboard" />}
-					<NavButton label="Webhooks" to="/webhook" />
+					{/* <NavButton label="Webhooks" to="/webhook" /> */}
 					{user?.admin && <NavButton label="Admin" to="/admin" />}
 				</nav>
 				{!user ? (

@@ -9,8 +9,8 @@ import {
 	BOT_TOKEN,
 	CLIENT_ID,
 } from './enviroment';
-import fetch from 'node-fetch';
 import { asyncExecute } from './db';
+import axios from 'axios';
 
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 
@@ -37,22 +37,22 @@ export const stringify = (o: any) =>
 export const notify = async (title: string, options?: any) => {
 	const subscriptions = await asyncExecute('SELECT * FROM push_subscriptions');
 
-	const response = await fetch('https://discord.com/api/users/@me', {
-		headers: { Authorization: `Bot ${BOT_TOKEN}` },
-	});
+	const response = await axios
+		.get('https://discord.com/api/users/@me', {
+			headers: { Authorization: `Bot ${BOT_TOKEN}` },
+		})
+		.catch((err: any) => ({ status: err.response.data, data: {} }));
 
 	// Get bot avatar URL
 	const icon =
 		response.status !== 200
 			? ''
-			: await (async () => {
-					const { avatar, discriminator } = await response.json();
-					return `https://cdn.discord.com/${
+			: (({ avatar, discriminator }) =>
+					`https://cdn.discord.com/${
 						avatar
 							? `avatars/${CLIENT_ID}/${avatar}`
 							: `embed/avatars/${discriminator % 5}`
-					}.png`;
-			  })();
+					}.png`)(response.data);
 
 	const notification = {
 		title,

@@ -5,7 +5,7 @@ import { asyncExecute } from '../util/db';
 import { DBL_TOKEN } from '../util/enviroment';
 import { asyncHandler, notify } from '../util/utils';
 import config from '../config.json';
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 const router = express.Router();
 
@@ -47,12 +47,15 @@ router.post(
 			).catch(console.error);
 		}
 
-		const response = await fetch(`https://discord.com/api/users/${user}`);
+		const response = await axios
+			.get(`https://discord.com/api/users/${user}`)
+			.catch(() => ({ status: 403, data: {} }));
+
 		const title =
 			response.status !== 200
 				? `User ID ${user} just voted!`
-				: await (async () => {
-						const { username, discriminator } = await response.json();
+				: (() => {
+						const { username, discriminator } = response.data;
 						return `${username}#${discriminator}`;
 				  })();
 

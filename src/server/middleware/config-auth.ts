@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { asyncHandler, isAdmin } from '../util/utils';
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 const configAuth: RequestHandler = asyncHandler(async (req, res, next) => {
 	const {
@@ -21,11 +21,11 @@ const configAuth: RequestHandler = asyncHandler(async (req, res, next) => {
 		});
 
 	// Get user guilds
-	const guilds: any[] = await (
-		await fetch('https://discord.com/api/users/@me/guilds', {
-			headers: { Authorization: authorization },
-		})
-	).json();
+	const {
+		data: guilds,
+	} = await axios.get('https://discord.com/api/users/@me/guilds', {
+		headers: { Authorization: authorization },
+	});
 
 	// Check if user has access to guild and is administrator
 	const guild = guilds.find((guild: { id: string }) => guild.id === guild_id);

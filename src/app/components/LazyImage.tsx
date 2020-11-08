@@ -8,7 +8,7 @@ interface Props {
 	style?: React.CSSProperties;
 }
 
-const SuspenseImage: React.FC<Props> = ({
+const LazyImage: React.FC<Props> = ({
 	fallback,
 	src,
 	alt,
@@ -34,4 +34,4 @@ const SuspenseImage: React.FC<Props> = ({
 	);
 };
 
-export default SuspenseImage;
+export default LazyImage;

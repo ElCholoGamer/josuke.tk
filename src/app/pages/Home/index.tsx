@@ -6,14 +6,14 @@ import ImageGen from 'assets/img/image-gen.png';
 import LevelsImg from 'assets/img/levels.png';
 import DashboardImg from 'assets/img/dashboard.png';
 import './Home.scss';
-import SuspenseImage from 'components/SuspenseImage';
+import LazyImage from 'components/LazyImage';
 
 const Home: React.FC = () => {
 	document.title = 'Josuke';
 
 	return (
 		<main className="main-page">
-			<SuspenseImage
+			<LazyImage
 				src={PageLogo}
 				alt="bot avatar"
 				className="logo"

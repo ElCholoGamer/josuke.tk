@@ -43,7 +43,10 @@ const App: React.FC = () => {
 			expires: new Date(Date.now() + parseInt(expires) * 1000),
 		});
 		cookies.set('refresh_token', refreshToken, options);
-		window.location.href = window.localStorage.getItem('redirect') || '/';
+
+		const redirect = window.localStorage.getItem('redirect') || '/';
+		window.localStorage.removeItem('redirect');
+		window.location.href = redirect;
 		return null;
 	} else if (!loaded) return <Loading />;
 

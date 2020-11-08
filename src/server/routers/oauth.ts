@@ -1,7 +1,7 @@
 import express from 'express';
-import fetch from 'node-fetch';
 import { asyncHandler, stringify } from '../util/utils';
 import { CLIENT_ID, CLIENT_SECRET } from '../util/enviroment';
+import axios from 'axios';
 
 const router = express.Router();
 
@@ -39,21 +39,21 @@ router.get(
 		const { protocol, hostname, baseUrl, path } = req;
 		const redirect_uri = `${protocol}://${hostname}${baseUrl}${path}`;
 
-		const response = await (
-			await fetch('https://discord.com/api/oauth2/token', {
-				method: 'POST',
-				body: stringify({
-					redirect_uri,
-					client_id: CLIENT_ID,
-					client_secret: CLIENT_SECRET,
-					code: code.toString(),
-					grant_type: 'authorization_code',
-				}),
+		const { data } = await axios.post(
+			'https://discord.com/api/oauth2/token',
+			stringify({
+				redirect_uri,
+				client_id: CLIENT_ID,
+				client_secret: CLIENT_SECRET,
+				code: code.toString(),
+				grant_type: 'authorization_code',
+			}),
+			{
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			})
-		).json();
+			}
+		);
 
-		const { scope, access_token, refresh_token, expires_in } = response;
+		const { scope, access_token, refresh_token, expires_in } = data;
 		if (scope !== OAuthScope) {
 			return res.status(400).json({
 				error: `Expected scope "${OAuthScope}", got instead "${scope}"`,
@@ -76,27 +76,24 @@ router.get(
 	asyncHandler(async (req, res) => {
 		const { params, protocol, hostname, path } = req;
 
-		const json = await (
-			await fetch(
-				`https://discord.com/api/oauth2/token?grant_type=refresh_token`,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					body: stringify({
-						client_id: CLIENT_ID,
-						client_secret: CLIENT_SECRET,
-						redirect_uri: `${protocol}://${hostname}${path}`,
-						grant_type: 'refresh_token',
-						refresh_token: params.token,
-						scope: OAuthScope,
-					}),
-				}
-			)
-		).json();
+		const { data } = await axios.post(
+			'https://discord.com/api/oauth2/token?grant_type=refresh_token',
+			{
+				client_id: CLIENT_ID,
+				client_secret: CLIENT_SECRET,
+				redirect_uri: `${protocol}://${hostname}${path}`,
+				grant_type: 'refresh_token',
+				refresh_token: params.token,
+				scope: OAuthScope,
+			},
+			{
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+			}
+		);
 
-		res.status(200).json(json);
+		res.status(200).json(data);
 	})
 );
 
@@ -104,21 +101,21 @@ router.get(
 router.post(
 	'/revoke/:token',
 	asyncHandler(async (req, res) => {
-		const response = await (
-			await fetch('https://discord.com/api/oauth2/token/revoke', {
-				method: 'POST',
+		const { data } = await axios.post(
+			'https://discord.com/api/oauth2/token/revoke',
+			{
+				client_id: CLIENT_ID,
+				client_secret: CLIENT_SECRET,
+				token: req.params.token,
+			},
+			{
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
-				body: stringify({
-					client_id: CLIENT_ID,
-					client_secret: CLIENT_SECRET,
-					token: req.params.token,
-				}),
-			})
-		).json();
+			}
+		);
 
-		res.status(200).json(response);
+		res.status(200).json(data);
 	})
 );
 

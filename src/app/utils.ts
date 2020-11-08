@@ -128,14 +128,12 @@ export const fetchUser = async (): Promise<User | null> => {
 			admin: config.admins.includes(id),
 			accessToken,
 			tag: `${username}#${discriminator}`,
-			getAvatarURL(options = {}) {
-				const { size = 128, format = 'png' } = options;
-				return avatar
-					? `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=${size}`
-					: `https://cdn.discordapp.com/embed/avatars/${
-							discriminator % 5
-					  }.${format}`;
-			},
+			getAvatarURL: ({ size = 128, format = 'png' } = {}) =>
+				`https://cdn.discordapp.com/${
+					avatar
+						? `avatars/${id}/${avatar}`
+						: `embed/avatars/${discriminator % 5}`
+				}.${format}?size=${size}`,
 		};
 	} catch (err) {
 		debug(err);
