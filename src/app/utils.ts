@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import React from 'react';
@@ -129,8 +131,8 @@ export const fetchUser = async (): Promise<User | null> => {
 			getAvatarURL(options = {}) {
 				const { size = 128, format = 'png' } = options;
 				return avatar
-					? `https://cdn.discord.com/avatars/${id}/${avatar}.${format}?size=${size}`
-					: `https://cdn.discord.com/embed/avatars/${
+					? `https://cdn.discordapp.com/avatars/${id}/${avatar}.${format}?size=${size}`
+					: `https://cdn.discordapp.com/embed/avatars/${
 							discriminator % 5
 					  }.${format}`;
 			},
