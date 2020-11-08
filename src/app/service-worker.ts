@@ -1,4 +1,5 @@
 export const register = async (Authorization: string) => {
+	// Check if navigator supports service workers
 	if (
 		!('serviceWorker' in navigator && 'PushManager' in window) ||
 		process.env.NODE_ENV !== 'production'
@@ -7,6 +8,7 @@ export const register = async (Authorization: string) => {
 		return;
 	}
 
+	// Register service worker
 	try {
 		await navigator.serviceWorker.register('/sw.js');
 	} catch (err) {
@@ -18,11 +20,13 @@ export const register = async (Authorization: string) => {
 		return;
 	}
 
+	// Request permission for notifications
 	if ((await Notification.requestPermission()) !== 'granted') {
 		alert('You must grant notification permissions!');
 		return;
 	}
 
+	// Get public VAPID key
 	const { key } = await (await fetch('/api/vapidkey')).json();
 	if (!key) {
 		alert('No VAPID key found!');
