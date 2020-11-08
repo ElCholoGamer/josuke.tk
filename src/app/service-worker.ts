@@ -1,33 +1,89 @@
-export const register = () =>
-	window.addEventListener('load', async () => {
-		if (!('serviceWorker' in navigator && 'PushManager' in window)) return;
-		console.log('Registering service worker...');
+export const register = async (Authorization: string) => {
+	if (
+		!('serviceWorker' in navigator && 'PushManager' in window) ||
+		process.env.NODE_ENV !== 'production'
+	) {
+		alert("This navigator or window doesn't support service workers!");
+		return;
+	}
 
-		try {
-			await navigator.serviceWorker.register('/sw.js');
-			console.log('Service Worker registered!');
-		} catch (err) {
-			console.error('Error registering service worker:', err);
-			return;
-		}
+	try {
+		await navigator.serviceWorker.register('/sw.js');
+	} catch (err) {
+		alert(
+			`Error registering service worker: ${
+				err.message || '[no message provided]'
+			}`
+		);
+		return;
+	}
 
-		if ((await Notification.requestPermission()) !== 'granted') return;
-		console.log('Subscribing to push notifications...');
+	if ((await Notification.requestPermission()) !== 'granted') {
+		alert('You must grant notification permissions!');
+		return;
+	}
 
-		const { key } = await (await fetch('/api/vapidkey')).json();
+	const { key } = await (await fetch('/api/vapidkey')).json();
+	if (!key) {
+		alert('No VAPID key found!');
+		return;
+	}
 
-		const serviceWorker = await navigator.serviceWorker.ready;
-		const subscription = await serviceWorker.pushManager.subscribe({
-			userVisibleOnly: true,
-			applicationServerKey: key,
-		});
-
-		const res = await (
-			await fetch('/api/subscribe', {
-				method: 'POST',
-				body: JSON.stringify(subscription),
-				headers: { 'Content-Type': 'application/json' },
-			})
-		).json();
-		console.log('Subscribe response:', res);
+	// Subscribe service worker
+	const serviceWorker = await navigator.serviceWorker.ready;
+	const subscription = await serviceWorker.pushManager.subscribe({
+		userVisibleOnly: true,
+		applicationServerKey: key,
 	});
+
+	const res = await fetch('/api/admin/subscribe', {
+		method: 'POST',
+		body: JSON.stringify(subscription),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization,
+		},
+	});
+
+	const { message, subscription_id } = await res.json();
+	window.localStorage.setItem('subscription_id', subscription_id);
+
+	switch (res.status) {
+		case 204:
+			alert('You have subscribed succesfully!');
+			break;
+		case 409:
+			alert('You are already subscribed!');
+			break;
+		case 500:
+			alert(`An internal server error occurred: ${message}`);
+			break;
+		default:
+			alert(`Unknown response status code: ${message}`);
+			break;
+	}
+};
+
+export const unregister = () => {
+	if (!('serviceWorker' in navigator && 'PushManager' in window)) {
+		alert("This navigator or window doesn't support service workers!");
+		return;
+	}
+
+	const id = window.localStorage.getItem('subscription_id');
+	if (!id) {
+		alert('You are not subscribed!');
+		return;
+	}
+
+	navigator.serviceWorker.ready
+		.then(sw => sw.unregister())
+		.then(() => alert('Service worker unregistered!'))
+		.catch(err =>
+			alert(
+				`Error unregistering service worker: ${
+					err.message || '[no message provided]'
+				}`
+			)
+		);
+};
