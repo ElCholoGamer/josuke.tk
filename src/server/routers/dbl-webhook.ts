@@ -5,6 +5,7 @@ import { asyncExecute } from '../util/db';
 import { ADMIN_PASSWORD, DBL_TOKEN } from '../util/enviroment';
 import { asyncHandler } from '../util/utils';
 import config from '../config.json';
+import fetch from 'node-fetch';
 
 const router = express.Router();
 
@@ -18,7 +19,14 @@ router.post(
 				message: 'Invalid "Authorization" headr in request',
 			});
 
-		const { user, isWeekend, type } = req.body;
+		const { user, isWeekend = false, type } = req.body;
+		if (!user)
+			return res.status(400).json({
+				status: 400,
+				message: 'Missing "user" value in request body',
+			});
+
+		console.log('Vote type:', type);
 		console.log(`User ID ${user} just voted!`);
 
 		if (type !== 'test') {
