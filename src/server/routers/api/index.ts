@@ -1,9 +1,9 @@
 import express from 'express';
 import { asyncHandler, isAdmin } from '../../util/utils';
 import fetch from 'node-fetch';
-import { env } from 'process';
 import admin from './admin';
 import config from './config';
+import { BOT_TOKEN } from '../../util/enviroment';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get(
 		// Fetch bot guilds
 		const botGuilds = await (
 			await fetch(`https://discordapp.com/api/users/@me/guilds`, {
-				headers: { Authorization: `Bot ${env.BOT_TOKEN}` },
+				headers: { Authorization: `Bot ${BOT_TOKEN}` },
 			})
 		).json();
 
@@ -36,6 +36,13 @@ router.get(
 				),
 			}))
 		);
+	})
+);
+
+router.get('/vapidkey', (req, res) =>
+	res.status(200).json({
+		status: 200,
+		key: process.env.VAPID_PUBLIC_KEY,
 	})
 );
 

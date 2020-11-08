@@ -58,7 +58,11 @@ module.exports = {
 		],
 	},
 	plugins: [
-		new HtmlWebpackPlugin({ template: './src/app/index.html' }),
+		new HtmlWebpackPlugin({
+			template: './src/app/index.html',
+			title: 'Josuke',
+			minify: true,
+		}),
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
 		!!process.env.ANALYZE && new BundleAnalyzerPlugin(),

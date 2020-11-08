@@ -12,4 +12,7 @@ export const {
 	DB_PASSWORD,
 	NODE_ENV = process.argv.includes('-d') ? 'development' : 'production',
 	HEROKU = (process.env._ || '').indexOf('heroku') !== -1 ? 'true' : 'false',
+	VAPID_SUBJECT,
+	VAPID_PUBLIC_KEY,
+	VAPID_PRIVATE_KEY,
 } = process.env;
