@@ -12,7 +12,11 @@ import {
 import { asyncExecute } from './db';
 import axios from 'axios';
 
-webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+webpush.setVapidDetails(
+	VAPID_SUBJECT || '',
+	VAPID_PUBLIC_KEY || '',
+	VAPID_PRIVATE_KEY || ''
+);
 
 const ADMIN = 0x00000008;
 export const isAdmin = (permissions: number) => (permissions & ADMIN) === ADMIN;
