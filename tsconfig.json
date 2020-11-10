@@ -18,6 +18,7 @@
 		"noImplicitAny": false,
 		"strictNullChecks": true,
 		"skipLibCheck": true,
+		"baseUrl": ".",
 		"paths": {
 			"assets/*": ["./src/app/assets/*"],
 			"components/*": ["./src/app/components/*"]
