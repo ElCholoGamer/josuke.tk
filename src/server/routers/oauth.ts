@@ -1,5 +1,5 @@
 import express from 'express';
-import { asyncHandler, stringify } from '../util/utils';
+import { asyncHandler, DISCORD_API, stringify } from '../util/utils';
 import { CLIENT_ID, CLIENT_SECRET } from '../util/enviroment';
 import axios from 'axios';
 
@@ -16,7 +16,7 @@ const OauthQuery = {
 router.get('/login', (req, res) => {
 	const { protocol, hostname, baseUrl } = req;
 	res.status(200).redirect(
-		`https://discord.com/api/oauth2/authorize?${stringify({
+		`${DISCORD_API}/oauth2/authorize?${stringify({
 			...OauthQuery,
 			redirect_uri: `${protocol}://${hostname}${baseUrl}/callback`,
 		})}`
@@ -40,12 +40,12 @@ router.get(
 		const redirect_uri = `${protocol}://${hostname}${baseUrl}${path}`;
 
 		const { data } = await axios.post(
-			'https://discord.com/api/oauth2/token',
+			`${DISCORD_API}/oauth2/token`,
 			stringify({
 				redirect_uri,
 				client_id: CLIENT_ID,
 				client_secret: CLIENT_SECRET,
-				code: code.toString(),
+				code,
 				grant_type: 'authorization_code',
 			}),
 			{
@@ -77,7 +77,7 @@ router.get(
 		const { params, protocol, hostname, path } = req;
 
 		const { data } = await axios.post(
-			'https://discord.com/api/oauth2/token?grant_type=refresh_token',
+			`${DISCORD_API}/oauth2/token?grant_type=refresh_token`,
 			{
 				client_id: CLIENT_ID,
 				client_secret: CLIENT_SECRET,
@@ -102,7 +102,7 @@ router.post(
 	'/revoke/:token',
 	asyncHandler(async (req, res) => {
 		const { data } = await axios.post(
-			'https://discord.com/api/oauth2/token/revoke',
+			`${DISCORD_API}/oauth2/token/revoke`,
 			{
 				client_id: CLIENT_ID,
 				client_secret: CLIENT_SECRET,
@@ -122,7 +122,7 @@ router.post(
 // Invite bot
 router.get('/invite', (req, res) => {
 	res.status(200).redirect(
-		`https://discord.com/api/oauth2/authorize?${stringify({
+		`${DISCORD_API}/oauth2/authorize?${stringify({
 			client_id: CLIENT_ID,
 			permissions: 280095814,
 			scope: 'bot',

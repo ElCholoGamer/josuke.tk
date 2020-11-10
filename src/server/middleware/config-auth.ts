@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { asyncHandler, isAdmin } from '../util/utils';
+import { asyncHandler, DISCORD_API, isAdmin } from '../util/utils';
 import axios from 'axios';
 
 const configAuth: RequestHandler = asyncHandler(async (req, res, next) => {
@@ -21,9 +21,7 @@ const configAuth: RequestHandler = asyncHandler(async (req, res, next) => {
 		});
 
 	// Get user guilds
-	const {
-		data: guilds,
-	} = await axios.get('https://discord.com/api/users/@me/guilds', {
+	const { data: guilds } = await axios.get(`${DISCORD_API}/users/@me/guilds`, {
 		headers: { Authorization: authorization },
 	});
 

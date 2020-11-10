@@ -3,7 +3,7 @@
 import express from 'express';
 import { asyncExecute } from '../util/db';
 import { DBL_TOKEN } from '../util/enviroment';
-import { asyncHandler, notify } from '../util/utils';
+import { asyncHandler, DISCORD_API, notify } from '../util/utils';
 import config from '../config.json';
 import axios from 'axios';
 
@@ -48,7 +48,7 @@ router.post(
 		}
 
 		const response = await axios
-			.get(`https://discord.com/api/users/${user}`)
+			.get(`${DISCORD_API}/users/${user}`)
 			.catch(() => ({ status: 403, data: {} }));
 
 		const title =

@@ -38,7 +38,7 @@ export const notify = async (title: string, options?: any) => {
 	const subscriptions = await asyncExecute('SELECT * FROM push_subscriptions');
 
 	const response = await axios
-		.get('https://discord.com/api/users/@me', {
+		.get(`${DISCORD_API}/users/@me`, {
 			headers: { Authorization: `Bot ${BOT_TOKEN}` },
 		})
 		.catch((err: any) => ({ status: err.response.data, data: {} }));
@@ -63,8 +63,10 @@ export const notify = async (title: string, options?: any) => {
 	};
 
 	await Promise.all(
-		subscriptions.map(async row =>
+		subscriptions.map(row =>
 			webpush.sendNotification(row.subscription, JSON.stringify(notification))
 		)
 	);
 };
+
+export const DISCORD_API = 'https://discord.com/api';

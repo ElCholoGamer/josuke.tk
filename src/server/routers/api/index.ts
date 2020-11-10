@@ -1,5 +1,5 @@
 import express from 'express';
-import { asyncHandler, isAdmin } from '../../util/utils';
+import { asyncHandler, DISCORD_API, isAdmin } from '../../util/utils';
 import admin from './admin';
 import config from './config';
 import { BOT_TOKEN } from '../../util/enviroment';
@@ -15,18 +15,19 @@ router.get(
 	asyncHandler(async (req, res) => {
 		// Fetch bot guilds
 		const { data: botGuilds } = await axios.get(
-			'https://discord.com/api/users/@me/guilds',
+			`${DISCORD_API}/users/@me/guilds`,
 			{
 				headers: { Authorization: `Bot ${BOT_TOKEN}` },
 			}
 		);
 
 		// Return user guilds with admin and bot data
-		const {
-			data: userGuilds,
-		} = await axios.get('https://discord.com/api/users/@me/guilds', {
-			headers: { Authorization: `Bearer ${req.params.accessToken}` },
-		});
+		const { data: userGuilds } = await axios.get(
+			`${DISCORD_API}/users/@me/guilds`,
+			{
+				headers: { Authorization: `Bearer ${req.params.accessToken}` },
+			}
+		);
 		res.status(200).json(
 			userGuilds.map((guild: any) => ({
 				...guild,
