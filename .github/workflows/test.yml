@@ -7,13 +7,15 @@ on:
     branches: [master]
 
 jobs:
-  test:
+  test_routes:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: yarn install
       - name: Test routes
+        env:
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: yarn test
       - name: Run latest build
         run: yarn build
