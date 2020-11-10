@@ -17,6 +17,7 @@ jobs:
         env:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           DBL_TOKEN: ${{ secrets.DBL_TOKEN }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: yarn test
       - name: Run build
         run: yarn build
