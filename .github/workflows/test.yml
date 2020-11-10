@@ -1,4 +1,4 @@
-name: Build
+name: Build and testing
 
 on:
   push:
@@ -13,5 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: yarn install
+      - name: Test routes
+        run: yarn test
       - name: Run latest build
         run: yarn build
