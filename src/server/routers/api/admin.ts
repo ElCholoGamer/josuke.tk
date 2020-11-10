@@ -4,7 +4,7 @@ import { asyncHandler, DISCORD_API, notify } from '../../util/utils';
 import { asyncExecute } from '../../util/db';
 import crypto from 'crypto';
 import axios from 'axios';
-import { BOT_TOKEN, CLIENT_ID } from '../../util/enviroment';
+import { BOT_TOKEN, CLIENT_ID, DBL_TOKEN } from '../../util/enviroment';
 
 const router = express.Router();
 router.use(adminAuth);
@@ -94,7 +94,10 @@ router.get(
 router.get(
 	'/stats',
 	asyncHandler(async (req, res) => {
-		const { data } = await axios.get(`https://top.gg/api/bots/${CLIENT_ID}`);
+		const { data } = await axios.get(`https://top.gg/api/bots/${CLIENT_ID}`, {
+			headers: { Authorization: DBL_TOKEN },
+		});
+
 		res.status(200).json(data);
 	})
 );
