@@ -12,6 +12,7 @@ const db = mysql.createPool({
 });
 
 export const connectDatabase = async (): Promise<void> => {
+	if (process.env.CI) return;
 	console.log('Connecting to database...');
 	await asyncQuery('SELECT 1 + 1 AS result');
 };
