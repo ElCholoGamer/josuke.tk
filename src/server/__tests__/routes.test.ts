@@ -14,7 +14,7 @@ afterAll(done => {
 });
 
 describe('Route testing', () => {
-	it('should /oauth/login redirect', async () => {
+	it('should /oauth/login redirect request', async () => {
 		const res = await request(app).get('/oauth/login');
 		expect(res.status).toBe(302);
 	});

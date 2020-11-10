@@ -16,6 +16,7 @@ jobs:
       - name: Test routes
         env:
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          DBL_TOKEN: ${{ secrets.DBL_TOKEN }}
         run: yarn test
-      - name: Run latest build
+      - name: Run build
         run: yarn build
