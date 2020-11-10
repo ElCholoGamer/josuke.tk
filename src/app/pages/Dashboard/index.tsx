@@ -9,11 +9,12 @@ interface Props {
 
 const Dashboard: React.FC<Props> = ({ user }) => {
 	const [guilds, setGuilds] = React.useState<Guild[] | null>(null);
-	const mounted = React.useRef(true);
 
 	// Fetch user guilds
 	React.useEffect(() => {
-		if (!user || !mounted) return;
+		if (!user) return;
+
+		let mounted = true;
 		(async () => {
 			try {
 				// Get bot guilds and use them to filter stuff
@@ -21,16 +22,16 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 					await fetch(`/api/guilds/${user.accessToken}`)
 				).json();
 
-				if (mounted.current) setGuilds(res);
+				if (mounted) setGuilds(res);
 			} catch (err) {
 				debug(err);
 			}
 		})();
 
 		return () => {
-			mounted.current = false;
+			mounted = false;
 		};
-	}, [user, mounted]);
+	}, [user]);
 
 	document.title = 'Dashboard';
 

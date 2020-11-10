@@ -4,3 +4,21 @@ video {
 	padding: 0 auto;
 	margin: 30px auto;
 }
+
+.admin-title {
+	text-align: center;
+	font-weight: bolder;
+	margin: 30px;
+}
+
+.admin-main {
+	display: flex;
+	padding: 50px;
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.count-up {
+	font-size: 30px;
+}

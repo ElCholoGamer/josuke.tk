@@ -1,8 +1,10 @@
 import express from 'express';
 import adminAuth from '../../middleware/admin-auth';
-import { asyncHandler, notify } from '../../util/utils';
+import { asyncHandler, DISCORD_API, notify } from '../../util/utils';
 import { asyncExecute } from '../../util/db';
 import crypto from 'crypto';
+import axios from 'axios';
+import { BOT_TOKEN, CLIENT_ID, DBL_TOKEN } from '../../util/enviroment';
 
 const router = express.Router();
 router.use(adminAuth);
@@ -75,6 +77,28 @@ router.post(
 			status: 200,
 			message: 'Notification sent',
 		});
+	})
+);
+
+router.get(
+	'/guilds',
+	asyncHandler(async (req, res) => {
+		const { data } = await axios.get(`${DISCORD_API}/users/@me/guilds`, {
+			headers: { Authorization: `Bot ${BOT_TOKEN}` },
+		});
+
+		res.status(200).json(data);
+	})
+);
+
+router.get(
+	'/stats',
+	asyncHandler(async (req, res) => {
+		const { data } = await axios.get(`https://top.gg/api/bots/${CLIENT_ID}`, {
+			headers: { Authorization: DBL_TOKEN },
+		});
+
+		res.status(200).json(data);
 	})
 );
 
