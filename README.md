@@ -2,10 +2,10 @@
 
 ### An easy-to-use configuration page for the bot
 
+![build][build]
+
 <br />
 
 Hmm there's not much to show tho
 
-## Meanwhile Have an image of happy Josuke :D
-
-![happy josuke](https://raw.githubusercontent.com/ElCholoGamer/josuke-dashboard/master/src/app/assets/img/page-logo.png)
+[build]: https://github.com/ElCholoGamer/josuke-dashboard/workflows/Build/badge.svg
