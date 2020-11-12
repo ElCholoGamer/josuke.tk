@@ -17,7 +17,6 @@ const app = express();
 const server = http.createServer(app);
 
 // Settings
-app.set('json spaces', 2);
 app.enable('trust proxy');
 
 // Static files
@@ -42,6 +41,7 @@ export const setupApp = () =>
 		app.use('/dblwebhook', dblWebhook);
 
 		if (NODE_ENV === 'production') {
+			// React app
 			app.get('*', (req, res) => {
 				res.status(200).sendFile(path.join(BUILD_PATH, 'index.html'));
 			});
