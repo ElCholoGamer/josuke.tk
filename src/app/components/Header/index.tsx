@@ -1,10 +1,14 @@
 import axios from 'axios';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavItem from 'react-bootstrap/NavItem';
+import NavLink from 'react-bootstrap/NavLink';
+import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { debug, User } from '../../utils';
 import './Header.scss';
-import NavButton from './NavButton';
 
 interface Props {
 	user: User | null;
@@ -13,76 +17,71 @@ interface Props {
 const Header: React.FC<Props> = ({ user }) => {
 	const location = useLocation();
 
-	const handleClick = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-		e.preventDefault();
-		e.currentTarget.disabled = true;
-		document.title = 'Redirecting...';
+	const handleClick = ({
+		currentTarget,
+	}: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+		currentTarget.disabled = true;
 
 		const cookies = new Cookies();
 		const accessToken = cookies.get('access_token');
 
-		switch (e.currentTarget.name) {
+		switch (currentTarget.name) {
 			case 'login':
+				// Store current path in local storage and redirect to auth
 				window.localStorage.setItem('redirect', location.pathname);
 				window.location.href = '/oauth/login';
 				break;
 			case 'logout':
-				// Remove all cookies
+				// Remove all cookies and revoke access token
 				cookies.remove('access_token');
 				cookies.remove('refresh_token');
-
-				// Revoke access token
 				axios
 					.post(`/oauth/revoke/${accessToken}`)
 					.then(() => window.location.reload())
 					.catch(debug);
-				break;
-			default:
 		}
 	};
 
 	return (
-		<header>
-			<Link to="/" className="title">
-				Josuke
-			</Link>
-
-			<div className="header-right">
-				<nav>
-					<NavButton label="Home" to="/" />
-					{user && <NavButton label="My Servers" to="/dashboard" />}
-					{/* <NavButton label="Webhooks" to="/webhook" /> */}
-					{user?.admin && <NavButton label="Admin" to="/admin" />}
-				</nav>
-				{!user ? (
-					// User is not logged in
-					<input
-						className="log-in"
-						name="login"
-						type="button"
-						onClick={handleClick}
-						value="Log In"
-					/>
-				) : (
-					// User is logged in
-					<>
-						<h3>{user.tag}</h3>
-						<img
-							className="user-avatar"
-							src={user.getAvatarURL()}
-							alt="User avatar"
-						/>
-						<input
-							className="log-out"
-							name="logout"
-							type="button"
-							onClick={handleClick}
-							value="Log Out"
-						/>
-					</>
-				)}
-			</div>
-		</header>
+		<Navbar bg="dark" variant="dark" expand="md">
+			<Navbar.Brand>Josuke</Navbar.Brand>
+			<Navbar.Toggle aria-controls="basic-navbar-nav" />
+			<Navbar.Collapse id="basic-navbar-nav">
+				<Nav className="mr-auto">
+					<NavItem>
+						<NavLink href="/">Home</NavLink>
+					</NavItem>
+					{user && (
+						<NavItem>
+							<NavLink href="/dashboard">My Servers</NavLink>
+						</NavItem>
+					)}
+					{user?.admin && (
+						<NavItem>
+							<NavLink href="/admin">Admin</NavLink>
+						</NavItem>
+					)}
+				</Nav>
+				<Navbar.Text>
+					{user ? (
+						<>
+							{user.tag}
+							<img src={user.getAvatarURL()} className="user-avatar" />
+							<Button
+								variant="outline-danger"
+								name="logout"
+								onClick={handleClick}>
+								Log Out
+							</Button>
+						</>
+					) : (
+						<Button onClick={handleClick} name="login" variant="primary">
+							Log In
+						</Button>
+					)}
+				</Navbar.Text>
+			</Navbar.Collapse>
+		</Navbar>
 	);
 };
 
