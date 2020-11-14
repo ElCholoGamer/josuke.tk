@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
+import axios from 'axios';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
@@ -68,9 +69,9 @@ export const fetchUser = async (): Promise<User | null> => {
 	if (!accessToken && refreshToken) {
 		// Refresh access token
 		try {
-			const res = await fetch(`/oauth/refresh/${refreshToken}`);
+			const res = await axios.get(`/oauth/refresh/${refreshToken}`);
 			if (res.status === 200) {
-				const { access_token, refresh_token, expires_in } = await res.json();
+				const { access_token, refresh_token, expires_in } = res.data;
 				const cookies = new Cookies();
 
 				// Remove existing cookies
@@ -106,7 +107,7 @@ export const fetchUser = async (): Promise<User | null> => {
 
 	try {
 		// Fetch user info
-		const res = await fetch('https://discord.com/api/users/@me', {
+		const res = await axios.get('https://discord.com/api/users/@me', {
 			headers: { Authorization: `Bearer ${accessToken}` },
 		});
 
@@ -120,7 +121,7 @@ export const fetchUser = async (): Promise<User | null> => {
 				'Request error (This could be caused by an invalid access token)'
 			);
 		}
-		const user = await res.json();
+		const { data: user } = res;
 		const { username, discriminator, id, avatar } = user;
 
 		return {

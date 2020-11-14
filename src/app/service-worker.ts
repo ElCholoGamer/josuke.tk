@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const register = async (Authorization: string) => {
 	// Check if navigator supports service workers
 	if (
@@ -27,7 +29,9 @@ export const register = async (Authorization: string) => {
 	}
 
 	// Get public VAPID key
-	const { key } = await (await fetch('/api/vapidkey')).json();
+	const {
+		data: { key },
+	} = await axios.get('/api/vapidkey');
 	if (!key) {
 		alert('No VAPID key found!');
 		return;
@@ -40,16 +44,11 @@ export const register = async (Authorization: string) => {
 		applicationServerKey: key,
 	});
 
-	const res = await fetch('/api/admin/subscribe', {
-		method: 'POST',
-		body: JSON.stringify(subscription),
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization,
-		},
+	const res = await axios.post('api/admin/subscribe', subscription, {
+		headers: { Authorization },
 	});
 
-	const { message, subscription_id } = await res.json();
+	const { message, subscription_id } = res.data;
 	window.localStorage.setItem('subscription_id', subscription_id);
 
 	switch (res.status) {

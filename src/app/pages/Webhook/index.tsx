@@ -1,8 +1,9 @@
-import React from 'react';
+import axios from 'axios';
 import Setting from 'components/Setting';
+import React from 'react';
+import { debug } from '../../utils';
 import FileInfo from './FileInfo';
 import './Webhook.scss';
-import { debug } from '../../utils';
 
 interface WebhookData {
 	url: string;
@@ -61,10 +62,8 @@ const Webhook: React.FC = () => {
 		form.append('tts', tts.toString());
 		files.forEach((file, index) => form.append(`file${index + 1}`, file));
 
-		fetch(url, {
-			method: 'POST',
-			body: form,
-		})
+		axios
+			.post(url, form)
 			.then(debug)
 			.catch(debug)
 			.finally(() => {

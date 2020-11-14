@@ -1,8 +1,8 @@
+import Loading from 'components/Loading';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cookies, { CookieSetOptions } from 'universal-cookie';
 import './App.scss';
-import Loading from 'components/Loading';
 import { debug, fetchUser, useQuery, User } from './utils';
 
 const Home = React.lazy(() => import('./pages/Home'));

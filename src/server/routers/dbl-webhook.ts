@@ -28,7 +28,6 @@ router.post(
 				message: 'Missing "user" value in request body',
 			});
 
-		console.log('Vote type:', type);
 		console.log(`User ID ${user} just voted!`);
 
 		if (type !== 'test') {

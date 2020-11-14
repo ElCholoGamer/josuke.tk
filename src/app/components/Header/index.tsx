@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
@@ -31,9 +32,8 @@ const Header: React.FC<Props> = ({ user }) => {
 				cookies.remove('refresh_token');
 
 				// Revoke access token
-				fetch(`/oauth/revoke/${accessToken}`, {
-					method: 'POST',
-				})
+				axios
+					.post(`/oauth/revoke/${accessToken}`)
 					.then(() => window.location.reload())
 					.catch(debug);
 				break;

@@ -1,8 +1,9 @@
+import RickRoll from 'assets/video/admin.mp4';
+import axios from 'axios';
 import React from 'react';
+import Cookies from 'universal-cookie';
 import { debug, User } from '../../utils';
 import './Admin.scss';
-import RickRoll from 'assets/video/admin.mp4';
-import Cookies from 'universal-cookie';
 import Counter from './Counter';
 
 interface Stats {
@@ -40,21 +41,21 @@ const Admin: React.FC<Props> = ({ user }) => {
 			expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 		});
 
-		fetch('/api/admin/stats', { headers: { Authorization: password } })
-			.then(res => {
+		(async () => {
+			try {
+				const res = await axios.get('/api/admin/stats', {
+					headers: { Authorization: password },
+				});
+
 				if (res.status === 403) throw new Error('Invalid password');
-				return res;
-			})
-			.then(res => res.json())
-			.then(res => {
-				console.log(res);
-				if (mounted) setStats(res);
-			})
-			.catch(err => {
+				else if (mounted) setStats(res.data);
+			} catch (err) {
 				cookies.remove('admin');
 				debug(err);
-			})
-			.finally(() => setLoaded(true));
+			} finally {
+				setLoaded(true);
+			}
+		})();
 
 		return () => {
 			mounted = false;

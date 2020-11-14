@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { stringify } from 'querystring';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -45,9 +46,7 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 			clearInterval(timer);
 
 			// Fetch new bot guilds
-			const newGuilds = await (
-				await fetch(`/api/guilds/${accessToken}`)
-			).json();
+			const { data: newGuilds } = await axios.get(`/api/guilds/${accessToken}`);
 
 			// Check if bot was added
 			if (newGuilds.some((g: Guild) => g.id === guild.id && g.botAvailable)) {

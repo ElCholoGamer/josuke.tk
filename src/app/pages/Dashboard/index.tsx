@@ -1,7 +1,8 @@
+import axios from 'axios';
 import React from 'react';
-import GuildInfo from './GuildInfo';
 import { debug, Guild, User } from '../../utils';
 import './Dashboard.scss';
+import GuildInfo from './GuildInfo';
 
 interface Props {
 	user: User | null;
@@ -18,11 +19,8 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 		(async () => {
 			try {
 				// Get bot guilds and use them to filter stuff
-				const res = await (
-					await fetch(`/api/guilds/${user.accessToken}`)
-				).json();
-
-				if (mounted) setGuilds(res);
+				const { data } = await axios.get(`/api/guilds/${user.accessToken}`);
+				if (mounted) setGuilds(data);
 			} catch (err) {
 				debug(err);
 			}

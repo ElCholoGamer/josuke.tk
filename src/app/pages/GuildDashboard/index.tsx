@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Setting from 'components/Setting';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -23,11 +24,11 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 			if (!user) return;
 
 			try {
-				const res = await fetch(`/api/config?guild_id=${guildId}`, {
+				const res = await axios.get(`/api/config?guild_id=${guildId}`, {
 					headers: { Authorization: `Bearer ${user.accessToken}` },
 				});
 
-				const data = await res.json();
+				const { data } = res;
 				if (res.status === 200) {
 					setConfig(data);
 					setPrevConfig(data);
@@ -70,14 +71,10 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 		setSaveButtons(false);
 
 		// Update config
-		fetch(`/api/config?guild_id=${guildId}`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${user.accessToken}`,
-			},
-			body: JSON.stringify(config),
-		})
+		axios
+			.put(`/api/config?guild_id=${guildId}`, config, {
+				headers: { Authorization: `Bearer ${user.accessToken}` },
+			})
 			.then(res => {
 				if (res.status === 200) setPrevConfig(config);
 				else debug('Failed to save config:', res);
