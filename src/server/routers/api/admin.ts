@@ -1,10 +1,9 @@
+import axios from 'axios';
+import crypto from 'crypto';
 import express from 'express';
 import adminAuth from '../../middleware/admin-auth';
-import { asyncHandler, DISCORD_API, notify } from '../../util/utils';
-import { asyncExecute } from '../../util/db';
-import crypto from 'crypto';
-import axios from 'axios';
 import { BOT_TOKEN, CLIENT_ID, DBL_TOKEN } from '../../util/enviroment';
+import { asyncHandler, DISCORD_API, notify } from '../../util/utils';
 
 const router = express.Router();
 router.use(adminAuth);
@@ -20,10 +19,10 @@ router.post(
 		const id = md5sum.digest('hex');
 
 		// Insert ID into subscriptions
-		await asyncExecute(
-			'INSERT INTO push_subscriptions (id,subscription) VALUES (?,?)',
-			[id, JSON.stringify(subscription)]
-		);
+		// await asyncExecute(
+		// 	'INSERT INTO push_subscriptions (id,subscription) VALUES (?,?)',
+		// 	[id, JSON.stringify(subscription)]
+		// );
 
 		// Send response
 		res.status(201).json({
@@ -44,10 +43,10 @@ router.post(
 				message: 'Missing "subscription_id" query parameter',
 			});
 
-		const results = (await asyncExecute(
+		const results: any = {}; /*(await asyncExecute(
 			'DELETE FROM push_subscriptions WHERE id=?',
 			[subscription_id]
-		)) as any;
+		)) as any;*/
 
 		if (!results.affectedRows)
 			return res.status(404).json({

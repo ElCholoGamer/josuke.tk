@@ -1,17 +1,17 @@
-import express from 'express';
-import path from 'path';
 import cors from 'cors';
+import express from 'express';
+import http from 'http';
 import morgan from 'morgan';
+import path from 'path';
+import decompressor from './middleware/decompressor';
+import errorHandler from './middleware/error-handler';
 import apiRouter from './routers/api';
 import closeRouter from './routers/close';
+import dblWebhook from './routers/dbl-webhook';
 import oauthRouter from './routers/oauth';
-import decompressor from './middleware/decompressor';
-import { connectDatabase } from './util/db';
-import errorHandler from './middleware/error-handler';
+import { connect } from './util/db';
 import { HEROKU, NODE_ENV } from './util/enviroment';
 import { stringify } from './util/utils';
-import http from 'http';
-import dblWebhook from './routers/dbl-webhook';
 
 const app = express();
 const server = http.createServer(app);
@@ -32,7 +32,7 @@ if (HEROKU === 'false') app.use(morgan('dev'));
 
 // Connect to database and set up routes
 export const setupApp = () =>
-	connectDatabase().then(async () => {
+	connect().then(() => {
 		console.log('Database connected!');
 
 		// Routes

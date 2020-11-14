@@ -1,4 +1,4 @@
-name: Build and testing
+name: Build
 
 on:
   push:
@@ -13,11 +13,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: yarn install
-      - name: Test routes
-        env:
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          DBL_TOKEN: ${{ secrets.DBL_TOKEN }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        run: yarn test
       - name: Run build
         run: yarn build

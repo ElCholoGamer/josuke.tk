@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import React from 'react';
 import config from '../server/config.json';
 
 /**
@@ -49,8 +49,8 @@ export interface Config {
 	prefix: string;
 	levels: boolean;
 	snipe: boolean;
-	send_level: boolean;
-	level_message: string;
+	sendLevel: boolean;
+	levelMessage: string;
 }
 
 /**

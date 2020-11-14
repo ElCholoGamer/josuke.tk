@@ -1,9 +1,9 @@
+import Setting from 'components/Setting';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import SaveFooter from './SaveFooter';
-import Setting from 'components/Setting';
 import { compareObjects, Config, debug, User } from '../../utils';
 import './GuildDashboard.scss';
+import SaveFooter from './SaveFooter';
 
 interface Props {
 	user: User | null;
@@ -57,11 +57,11 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 
 	const handleClick = () => {
 		// Check if string fields are valid
-		const { prefix, level_message, levels, send_level } = config;
+		const { prefix, levelMessage, levels, sendLevel } = config;
 		if (!prefix.length) {
 			alert('Cannot have an empty prefix!');
 			return;
-		} else if (!level_message.length && levels && send_level) {
+		} else if (!levelMessage.length && levels && sendLevel) {
 			alert('Cannot have an empty level-up message!');
 			return;
 		}
@@ -113,14 +113,14 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 				Enabled:
 			</Setting>
 			<Setting
-				name="send_level"
+				name="sendLevel"
 				config={config}
 				setConfig={setConfig}
 				type="toggle">
 				Send level-up message:
 			</Setting>
 			<Setting
-				name="level_message"
+				name="levelMessage"
 				config={config}
 				setConfig={setConfig}
 				maxLength={200}

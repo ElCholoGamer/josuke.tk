@@ -1,16 +1,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
+import axios from 'axios';
 import { RequestHandler } from 'express';
 import webpush from 'web-push';
 import {
-	VAPID_SUBJECT,
-	VAPID_PUBLIC_KEY,
-	VAPID_PRIVATE_KEY,
 	BOT_TOKEN,
 	CLIENT_ID,
+	VAPID_PRIVATE_KEY,
+	VAPID_PUBLIC_KEY,
+	VAPID_SUBJECT,
 } from './enviroment';
-import { asyncExecute } from './db';
-import axios from 'axios';
 
 if (!process.env.CI) {
 	webpush.setVapidDetails(
@@ -41,7 +40,7 @@ export const stringify = (o: any) =>
 		.join('&');
 
 export const notify = async (title: string, options?: any) => {
-	const subscriptions = await asyncExecute('SELECT * FROM push_subscriptions');
+	const subscriptions = []; // await asyncExecute('SELECT * FROM push_subscriptions');
 
 	const response = await axios
 		.get(`${DISCORD_API}/users/@me`, {

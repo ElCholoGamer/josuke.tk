@@ -1,11 +1,20 @@
 import express from 'express';
-import { asyncExecute } from '../../util/db';
-import { asyncHandler } from '../../util/utils';
 import configAuth from '../../middleware/config-auth';
+import db from '../../util/db';
+import { asyncHandler } from '../../util/utils';
 
 const router = express.Router();
 
 router.use(configAuth);
+
+const Guilds = db.collection('guilds');
+const defaultConfig = {
+	prefix: 'jo! ',
+	snipe: true,
+	levels: true,
+	sendLevel: true,
+	levelMessage: 'Congratulations, {user}, you have reached level {lvl}!',
+};
 
 // Get the settings for a guild ID
 router.get(
@@ -24,25 +33,13 @@ router.get(
 			});
 
 		// Get config from database
-		const config = (
-			await asyncExecute('SELECT * FROM configs WHERE guild_id=?', [guild_id])
-		)[0] || {
-			prefix: 'jo! ',
-			snipe: true,
-			levels: true,
-			send_level: true,
-			level_message: 'Congratulations, {user}, you have reached level {lvl}!',
-		};
+		const config =
+			(await Guilds.findOne({ _id: guild_id }))?.config || defaultConfig;
 
 		// Send response
-		const { prefix, snipe, levels, send_level, level_message } = config;
 		res.status(200).json({
+			...config,
 			guildName,
-			prefix,
-			snipe: !!snipe,
-			levels: !!levels,
-			send_level: !!send_level,
-			level_message,
 		});
 	})
 );
@@ -53,34 +50,29 @@ router.put(
 	asyncHandler(async (req, res) => {
 		const {
 			query: { guild_id },
+			body,
 		} = req;
 
 		// Get data with defaults
-		const {
-			prefix = 'jo! ',
-			snipe = true,
-			levels = true,
-			level_message,
-			send_level = true,
-		} = req.body;
-
-		// Create query params
-		const params = [
-			guild_id,
-			prefix,
-			+snipe,
-			+levels,
-			+send_level,
-			level_message,
-		];
+		const newConfig = {
+			...defaultConfig,
+			...body,
+		};
 
 		// Upsert data and send response
-		await asyncExecute(
-			'INSERT INTO configs (guild_id,prefix,snipe,levels,send_level,level_message) VALUES (?,?,?,?,?,?) ' +
-				'ON DUPLICATE KEY UPDATE guild_id=?, prefix=?, snipe=?, levels=?,send_level=?,level_message=?',
-			[...params, ...params]
-		);
-		res.status(200).json({ status: 200, new_config: params });
+		const guildData = (await Guilds.findOne({ _id: guild_id })) || {
+			_id: guild_id,
+			config: defaultConfig,
+			members: {},
+		};
+
+		guildData.config = newConfig;
+
+		await Guilds.findOneAndReplace({ _id: guild_id }, guildData, {
+			upsert: true,
+		});
+
+		res.status(200).json({ status: 200, config: newConfig });
 	})
 );
 
