@@ -1,19 +1,18 @@
 import React from 'react';
+import Spinner from 'react-bootstrap/Spinner';
 import './Loading.scss';
 
-const Loading: React.FC = () => {
-	const [dots, setDots] = React.useState(1);
-
-	React.useEffect(() => {
-		const timeout = setTimeout(setDots, 500, dots < 3 ? dots + 1 : 1);
-		return () => clearTimeout(timeout);
-	}, [dots]);
-
-	return (
-		<div className="loading-screen">
-			<h1>{'.'.repeat(dots)}</h1>
-		</div>
-	);
-};
+const size = 70;
+const Loading: React.FC = () => (
+	<div className="d-flex justify-content-center spinner-container">
+		<Spinner
+			variant="light"
+			style={{ width: size, height: size }}
+			animation="border"
+			role="status">
+			<span className="sr-only">Loading...</span>
+		</Spinner>
+	</div>
+);
 
 export default Loading;
