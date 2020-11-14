@@ -28,7 +28,7 @@ const Admin: React.FC<Props> = ({ user }) => {
 		const password =
 			cookies.get('admin') ||
 			(() => {
-				let pass;
+				let pass: string | null = null;
 				while (!pass) pass = prompt('Enter the admin password:');
 				return pass;
 			})();

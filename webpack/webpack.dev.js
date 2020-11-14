@@ -4,11 +4,6 @@ const common = require('./webpack.common');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const pkg = require('../package.json');
 const path = require('path');
-const open = require('open');
-
-// Open dev browser
-const port = 3000;
-open(`http://localhost:${port}/`);
 
 // Dev proxy settings
 const { proxy = '/' } = pkg;
@@ -19,7 +14,7 @@ module.exports = merge(common, {
 	devtool: 'eval-source-map',
 	devServer: {
 		contentBase: path.resolve(__dirname, '..', 'build'),
-		port,
+		port: 3000,
 		compress: true,
 		hot: true,
 		historyApiFallback: true,

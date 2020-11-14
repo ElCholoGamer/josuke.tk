@@ -1,7 +1,7 @@
-import express from 'express';
-import { asyncHandler, DISCORD_API, stringify } from '../util/utils';
-import { CLIENT_ID, CLIENT_SECRET } from '../util/enviroment';
 import axios from 'axios';
+import express from 'express';
+import { CLIENT_ID, CLIENT_SECRET } from '../util/enviroment';
+import { asyncHandler, DISCORD_API, stringify } from '../util/utils';
 
 const router = express.Router();
 
@@ -78,14 +78,14 @@ router.get(
 
 		const { data } = await axios.post(
 			`${DISCORD_API}/oauth2/token?grant_type=refresh_token`,
-			{
+			stringify({
 				client_id: CLIENT_ID,
 				client_secret: CLIENT_SECRET,
 				redirect_uri: `${protocol}://${hostname}${path}`,
 				grant_type: 'refresh_token',
 				refresh_token: params.token,
 				scope: OAuthScope,
-			},
+			}),
 			{
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
@@ -103,16 +103,11 @@ router.post(
 	asyncHandler(async (req, res) => {
 		const { data } = await axios.post(
 			`${DISCORD_API}/oauth2/token/revoke`,
-			{
+			stringify({
 				client_id: CLIENT_ID,
 				client_secret: CLIENT_SECRET,
 				token: req.params.token,
-			},
-			{
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-			}
+			})
 		);
 
 		res.status(200).json(data);
