@@ -1,12 +1,12 @@
-import React from 'react';
-import FeatureSection from './FeatureSection';
-import LinkedButton from 'components/LinkedButton/index';
-import PageLogo from 'assets/img/page-logo.png';
+import DashboardImg from 'assets/img/dashboard.png';
 import ImageGen from 'assets/img/image-gen.png';
 import LevelsImg from 'assets/img/levels.png';
-import DashboardImg from 'assets/img/dashboard.png';
-import './Home.scss';
+import PageLogo from 'assets/img/page-logo.png';
 import LazyImage from 'components/LazyImage';
+import LinkedButton from 'components/LinkedButton/index';
+import React from 'react';
+import FeatureSection from './FeatureSection';
+import './Home.scss';
 
 const Home: React.FC = () => {
 	document.title = 'Josuke';
@@ -19,8 +19,10 @@ const Home: React.FC = () => {
 				className="logo"
 				fallback={<div className="logo-fallback" />}
 			/>
-			<h1 className="subtitle">Spice up your server with a JoJo bot!</h1>
-			<h3>Some features include...</h3>
+			<h1 className="text-light display-4 subtitle">
+				Spice up your server with a JoJo bot!
+			</h1>
+			<h3 className="text-light">Some of Josuke's features include...</h3>
 
 			<div className="main-content">
 				<FeatureSection
@@ -47,11 +49,11 @@ const Home: React.FC = () => {
 				</FeatureSection>
 			</div>
 			<LinkedButton
-				style={{ width: '200px', height: '70px', margin: '50px' }}
+				style={{ margin: '50px' }}
 				to="/oauth/invite"
 				external
 				newTab>
-				Invite Josuke to Your Server!
+				Invite Josuke to your server!
 			</LinkedButton>
 		</main>
 	);

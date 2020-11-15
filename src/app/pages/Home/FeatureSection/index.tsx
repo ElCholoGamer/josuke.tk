@@ -2,10 +2,10 @@ import React from 'react';
 import './FeatureSection.scss';
 
 interface Props {
-  title: string;
-  image: string;
-  text?: string;
-  alignText: 'right' | 'left';
+	title: string;
+	image: string;
+	text?: string;
+	alignText: 'right' | 'left';
 }
 
 const FeatureSection: React.FC<Props> = ({
@@ -16,13 +16,13 @@ const FeatureSection: React.FC<Props> = ({
 	text,
 }) => (
 	<div className="feature-section">
-		<h1 className="feature-title">{title}</h1>
+		<h1 className="feature-title display-4 text-lightpurple">{title}</h1>
 		<div
 			className="feature-container"
 			style={{
 				flexDirection: alignText === 'left' ? 'row' : 'row-reverse',
 			}}>
-			<p className="feature-text">{text || children}</p>
+			<p className="feature-text text-light">{text || children}</p>
 			<img className="feature-image" src={image} alt="" />
 		</div>
 	</div>
