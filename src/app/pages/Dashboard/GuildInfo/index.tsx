@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { stringify } from 'querystring';
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
 import { Guild } from '../../../utils';
 import './GuildInfo.scss';
@@ -15,7 +16,7 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 
 	const { name, botAvailable } = guild;
 	const handleClick = (
-		e: React.MouseEvent<HTMLInputElement, MouseEvent>,
+		e: React.MouseEvent<HTMLElement, MouseEvent>,
 		redirect: boolean
 	) => {
 		e.preventDefault();
@@ -57,13 +58,13 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 
 	return (
 		<div className="guild-info">
-			<h2>{name}</h2>
-			<input
-				className={botAvailable ? 'dashboard-button' : 'setup-button'}
-				type="button"
-				value={botAvailable ? 'Go to Dashboard' : 'Invite to Server'}
+			<h3 className="text-light">{name}</h3>
+			<Button
+				className="guild-button"
 				onClick={e => handleClick(e, botAvailable)}
-			/>
+				variant={botAvailable ? 'darker' : 'purple'}>
+				{botAvailable ? 'Go to Dashboard' : 'Invite to Server'}
+			</Button>
 		</div>
 	);
 };

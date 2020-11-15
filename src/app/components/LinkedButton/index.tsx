@@ -1,6 +1,7 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import { useHistory } from 'react-router-dom';
-import './LinkedButton.scss';
+// import './LinkedButton.scss';
 
 interface Props {
 	label?: string;
@@ -20,13 +21,9 @@ const LinkedButton: React.FC<Props> = ({
 }) => {
 	const history = useHistory();
 	return (
-		<input
-			className="linked-button"
-			type="button"
-			value={label || children?.toString()}
+		<Button
+			variant="purple"
 			style={{
-				width: '150px',
-				height: '50px',
 				fontSize: '20px',
 				...style,
 			}}
@@ -35,8 +32,9 @@ const LinkedButton: React.FC<Props> = ({
 					if (newTab) window.open(to);
 					else window.location.href = to;
 				} else history.push(to);
-			}}
-		/>
+			}}>
+			{label || children}
+		</Button>
 	);
 };
 

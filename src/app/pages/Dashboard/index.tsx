@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Loading from 'components/Loading';
 import React from 'react';
 import { debug, Guild, User } from '../../utils';
 import './Dashboard.scss';
@@ -34,9 +35,10 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 	document.title = 'Dashboard';
 
 	if (!user)
-		return <h1 className="med-text">Log in to access your servers!</h1>;
-	else if (!guilds?.filter)
-		return <h1 className="med-text">Loading servers...</h1>;
+		return (
+			<h1 className="med-text text-white">Log in to access your servers!</h1>
+		);
+	else if (!guilds?.filter) return <Loading />;
 
 	const adminGuilds = guilds
 		.filter(guild => guild.admin)
@@ -44,9 +46,11 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 
 	return (
 		<main className="dashboard">
-			<h1>Dashboard</h1>
+			<h1 className="text-white">Dashboard</h1>
 			{!adminGuilds.length ? (
-				<h3>You are not an administrator in any server yet!</h3>
+				<h3 className="text-white med-text">
+					You are not an administrator in any server yet!
+				</h3>
 			) : (
 				adminGuilds.map(guild => (
 					<GuildInfo
