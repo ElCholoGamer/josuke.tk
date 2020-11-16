@@ -4,17 +4,18 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-const SRC = path.join(__dirname, '..', 'src');
+const SRC = path.resolve(__dirname, '..', 'src');
+const FILE_REGEX = /assets[\\/].*\.(jpe?g|png|gif|mp4)$/i;
 
 /** @type {require('webpack').Configuration} */
 module.exports = {
-	context: path.join(__dirname, '..'),
+	context: path.resolve(__dirname, '..'),
 	entry: path.join(SRC, 'app', 'index.tsx'),
 	output: {
 		filename: '[name].[contenthash].js',
 		publicPath: '/',
 		chunkFilename: '[name].[contenthash].chunk.js',
-		path: path.join(__dirname, '..', 'build'),
+		path: path.resolve(__dirname, '..', 'build'),
 	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -27,7 +28,6 @@ module.exports = {
 		rules: [
 			{
 				test: /\.tsx?$/i,
-				exclude: /node_modules/,
 				use: [
 					{
 						loader: 'babel-loader',
@@ -45,11 +45,11 @@ module.exports = {
 				],
 			},
 			{
-				test: /\.s?[ac]ss$/i,
+				test: /\.(s[ac]|c)ss$/i,
 				use: ['style-loader', 'css-loader', 'sass-loader'],
 			},
 			{
-				test: /assets[\\/].*\.(jpe?g|png|gif|mp4)$/i,
+				test: FILE_REGEX,
 				loader: 'file-loader',
 				options: {
 					name: 'assets/[name].[ext]',
@@ -60,11 +60,12 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: './src/app/index.html',
-			title: 'Josuke',
-			minify: true,
 		}),
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
 		!!process.env.ANALYZE && new BundleAnalyzerPlugin(),
 	].filter(plugin => plugin !== false),
+	performance: {
+		assetFilter: asset => !FILE_REGEX.test(asset),
+	},
 };
