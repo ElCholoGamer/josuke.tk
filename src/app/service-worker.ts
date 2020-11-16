@@ -44,7 +44,7 @@ export const register = async (Authorization: string) => {
 		applicationServerKey: key,
 	});
 
-	const res = await axios.post('api/admin/subscribe', subscription, {
+	const res = await axios.post('/api/admin/subscribe', subscription, {
 		headers: { Authorization },
 	});
 
