@@ -30,7 +30,7 @@
 		"web-push": "^3.4.4"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.12.7",
+		"@babel/core": "^7.12.9",
 		"@babel/plugin-transform-runtime": "^7.12.1",
 		"@babel/preset-react": "^7.12.7",
 		"@babel/preset-env": "^7.12.7",
