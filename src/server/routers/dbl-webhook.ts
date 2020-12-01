@@ -6,7 +6,7 @@ import { asyncHandler } from '../util/utils';
 
 const router = express.Router();
 
-const Users = db.collection('users');
+const User = db.collection('users');
 
 router.post(
 	'/',
@@ -29,7 +29,7 @@ router.post(
 
 		if (type !== 'test') {
 			// Add vote reward to user
-			const data = (await Users.findOne({ _id: user })) || {
+			const data = (await User.findOne({ _id: user })) || {
 				balance: 0,
 				lastDaily: 0,
 				items: [],
@@ -40,7 +40,7 @@ router.post(
 			const reward = voteReward * (isWeekend ? weekendMultiplier : 1);
 
 			data.balance += reward;
-			await Users.findOneAndReplace({ _id: user }, data, { upsert: true });
+			await User.findOneAndReplace({ _id: user }, data, { upsert: true });
 		}
 
 		res.json({
