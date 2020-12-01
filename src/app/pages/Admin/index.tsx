@@ -1,5 +1,6 @@
 import RickRoll from 'assets/video/admin.mp4';
 import axios from 'axios';
+import Loading from 'components/Loading';
 import React from 'react';
 import Cookies from 'universal-cookie';
 import { debug, User } from '../../utils';
@@ -64,7 +65,7 @@ const Admin: React.FC<Props> = ({ user }) => {
 
 	document.title = 'Admin';
 	if (!user?.admin) return <video src={RickRoll} controls={false} autoPlay />;
-	else if (!loaded) return <h1 className="med-text">Loading panel...</h1>;
+	else if (!loaded) return <Loading />;
 
 	return (
 		<>

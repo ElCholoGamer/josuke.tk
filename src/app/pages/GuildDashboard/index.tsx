@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Loading from 'components/Loading';
 import Setting from 'components/Setting';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -49,7 +50,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 	if (!user)
 		return <h1 className="med-text">Log in to access your servers!</h1>;
 
-	if (!config) return <h1 className="med-text">Loading dashboard...</h1>;
+	if (!config) return <Loading />;
 
 	document.title = `Dashboard | ${config.guildName}`;
 
@@ -84,7 +85,7 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 	};
 
 	return (
-		<main className="dashboard-main">
+		<main className="dashboard-main text-light">
 			<h1>
 				Dashboard for{' '}
 				<span style={{ fontWeight: 700 }}>{config.guildName}</span>

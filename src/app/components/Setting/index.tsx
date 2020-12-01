@@ -42,13 +42,13 @@ const Setting = <T extends Record<string, any>>({
 					type="text"
 					value={(config[name] as any).toString()}
 					onChange={handleChange}
-					className="setting-input"
+					className="setting-input text-light"
 					placeholder={textPlaceholder}
 					maxLength={maxLength}
 				/>
 			) : (
 				<textarea
-					className="setting-textarea"
+					className="setting-textarea text-light"
 					onChange={handleChange}
 					value={(config[name] as any).toString()}
 					maxLength={maxLength}
