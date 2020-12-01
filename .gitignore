@@ -1,8 +1,6 @@
 /node_modules
 /build
-server-prod/
+/dist
 
 .env*
 yarn-error.log
-.eslintrc*
-.eslintignore

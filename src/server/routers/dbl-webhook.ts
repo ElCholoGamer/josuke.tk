@@ -1,11 +1,8 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable indent */
-import axios from 'axios';
 import express from 'express';
 import config from '../config.json';
 import db from '../util/db';
 import { DBL_TOKEN } from '../util/enviroment';
-import { asyncHandler, DISCORD_API, notify } from '../util/utils';
+import { asyncHandler } from '../util/utils';
 
 const router = express.Router();
 
@@ -46,21 +43,7 @@ router.post(
 			await Users.findOneAndReplace({ _id: user }, data, { upsert: true });
 		}
 
-		const response = await axios
-			.get(`${DISCORD_API}/users/${user}`)
-			.catch(() => ({ status: 403, data: {} }));
-
-		const title =
-			response.status !== 200
-				? `User ID ${user} just voted!`
-				: (() => {
-						const { username, discriminator } = response.data;
-						return `${username}#${discriminator}`;
-				  })();
-
-		await notify(title);
-
-		res.status(200).json({
+		res.json({
 			status: 200,
 			message: 'Vote received',
 		});

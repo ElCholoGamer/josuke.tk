@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Loading from 'components/Loading';
+import Loading from '../../components/Loading';
 import React from 'react';
 import { debug, Guild, User } from '../../utils';
 import './Dashboard.scss';

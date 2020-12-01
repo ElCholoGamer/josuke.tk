@@ -1,39 +1,37 @@
-const path = require('path');
+const { resolve, join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const SRC = path.resolve(__dirname, '..', 'src');
-const FILE_REGEX = /assets[\\/].*\.(jpe?g|png|gif|mp4)$/i;
+const context = resolve(__dirname, '../');
 
-/** @type {require('webpack').Configuration} */
-module.exports = {
-	context: path.resolve(__dirname, '..'),
-	entry: path.join(SRC, 'app', 'index.tsx'),
+/** @type {import('webpack').Configuration} */
+const config = {
+	context,
+	entry: join(context, 'src/app/index.tsx'),
 	output: {
-		filename: '[name].[contenthash].js',
+		filename: 'js/[name].[contenthash:8].js',
 		publicPath: '/',
-		chunkFilename: '[name].[contenthash].chunk.js',
-		path: path.resolve(__dirname, '..', 'build'),
+		chunkFilename: 'js/[name].[contenthash:8].chunk.js',
+		path: join(context, 'build'),
 	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
-		alias: {
-			assets: path.join(SRC, 'app', 'assets'),
-			components: path.join(SRC, 'app', 'components'),
-		},
 	},
 	module: {
 		rules: [
 			{
-				test: /\.tsx?$/i,
+				test: /\.[jt]sx?$/i,
+				exclude: /node_modules/,
 				use: [
 					{
 						loader: 'babel-loader',
 						options: {
 							cacheDirectory: true,
-							sourceType: 'unambiguous',
+							presets: ['@babel/env', '@babel/react', '@babel/typescript'],
+							plugins: [['@babel/transform-runtime', { regenerator: true }]],
 						},
 					},
 					{
@@ -46,10 +44,10 @@ module.exports = {
 			},
 			{
 				test: /\.(s[ac]|c)ss$/i,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
+				use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
 			},
 			{
-				test: FILE_REGEX,
+				test: /\.(jpe?g|png|gif|ico|svg|mp4)$/i,
 				loader: 'file-loader',
 				options: {
 					name: 'assets/[name].[ext]',
@@ -59,13 +57,13 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: './src/app/index.html',
+			template: join(context, 'public/index.html'),
 		}),
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
-		!!process.env.ANALYZE && new BundleAnalyzerPlugin(),
-	].filter(plugin => plugin !== false),
-	performance: {
-		assetFilter: asset => !FILE_REGEX.test(asset),
-	},
+		new CopyWebpackPlugin({ patterns: [{ from: 'public/' }] }),
+		new MiniCssExtractPlugin({ filename: 'css/[name].[contenthash:8].css' }),
+	],
 };
+
+module.exports = config;

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import Loading from 'components/Loading';
-import Setting from 'components/Setting';
+import Loading from '../../components/Loading';
+import Setting from '../../components/Setting';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { compareObjects, Config, debug, User } from '../../utils';

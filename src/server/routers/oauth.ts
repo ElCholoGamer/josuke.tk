@@ -15,7 +15,7 @@ const OauthQuery = {
 // Login redirect
 router.get('/login', (req, res) => {
 	const { protocol, hostname, baseUrl } = req;
-	res.status(200).redirect(
+	res.redirect(
 		`${DISCORD_API}/oauth2/authorize?${stringify({
 			...OauthQuery,
 			redirect_uri: `${protocol}://${hostname}${baseUrl}/callback`,
@@ -29,7 +29,7 @@ router.get(
 	asyncHandler(async (req, res) => {
 		const { code, error } = req.query;
 
-		if (error) return res.status(200).redirect('/');
+		if (error) return res.redirect('/');
 
 		if (!code)
 			return res
@@ -60,7 +60,7 @@ router.get(
 			});
 		}
 
-		res.status(200).redirect(
+		res.redirect(
 			`/?${stringify({
 				access_token,
 				refresh_token,
@@ -93,7 +93,7 @@ router.get(
 			}
 		);
 
-		res.status(200).json(data);
+		res.json(data);
 	})
 );
 
@@ -110,13 +110,13 @@ router.post(
 			})
 		);
 
-		res.status(200).json(data);
+		res.json(data);
 	})
 );
 
 // Invite bot
 router.get('/invite', (req, res) => {
-	res.status(200).redirect(
+	res.redirect(
 		`${DISCORD_API}/oauth2/authorize?${stringify({
 			client_id: CLIENT_ID,
 			permissions: 280095814,

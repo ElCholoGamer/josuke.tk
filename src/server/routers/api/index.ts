@@ -28,7 +28,7 @@ router.get(
 				headers: { Authorization: `Bearer ${req.params.accessToken}` },
 			}
 		);
-		res.status(200).json(
+		res.json(
 			userGuilds.map((guild: any) => ({
 				...guild,
 				admin: isAdmin(guild.permissions),
@@ -41,7 +41,7 @@ router.get(
 );
 
 router.get('/vapidkey', (req, res) =>
-	res.status(200).json({
+	res.json({
 		status: 200,
 		key: process.env.VAPID_PUBLIC_KEY,
 	})

@@ -37,7 +37,7 @@ router.get(
 			(await Guilds.findOne({ _id: guild_id }))?.config || defaultConfig;
 
 		// Send response
-		res.status(200).json({
+		res.json({
 			...config,
 			guildName,
 		});
@@ -72,7 +72,7 @@ router.put(
 			upsert: true,
 		});
 
-		res.status(200).json({ status: 200, config: newConfig });
+		res.json({ status: 200, config: newConfig });
 	})
 );
 

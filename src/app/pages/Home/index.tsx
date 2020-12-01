@@ -1,9 +1,9 @@
-import DashboardImg from 'assets/img/dashboard.png';
-import ImageGen from 'assets/img/image-gen.png';
-import LevelsImg from 'assets/img/levels.png';
-import PageLogo from 'assets/img/page-logo.png';
-import LazyImage from 'components/LazyImage';
-import LinkedButton from 'components/LinkedButton/index';
+import DashboardImg from '../../assets/img/dashboard.png';
+import ImageGen from '../../assets/img/image-gen.png';
+import LevelsImg from '../../assets/img/levels.png';
+import PageLogo from '../../assets/img/page-logo.png';
+import LazyImage from '../../components/LazyImage';
+import LinkedButton from '../../components/LinkedButton/index';
 import React from 'react';
 import FeatureSection from './FeatureSection';
 import './Home.scss';

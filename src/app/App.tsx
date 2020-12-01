@@ -1,4 +1,4 @@
-import Loading from 'components/Loading';
+import Loading from './components/Loading';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cookies, { CookieSetOptions } from 'universal-cookie';
@@ -11,8 +11,8 @@ const GuildDashboard = React.lazy(() => import('./pages/GuildDashboard'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 const Webhook = React.lazy(() => import('./pages/Webhook'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
-const Footer = React.lazy(() => import('components/Footer'));
-const Header = React.lazy(() => import('components/Header'));
+const Footer = React.lazy(() => import('./components/Footer'));
+const Header = React.lazy(() => import('./components/Header'));
 
 const App: React.FC = () => {
 	const [loaded, setLoaded] = React.useState(false);
@@ -57,19 +57,15 @@ const App: React.FC = () => {
 				<Route
 					exact
 					path="/dashboard/:guildId"
-					component={() => <GuildDashboard user={user} />}
+					children={<GuildDashboard user={user} />}
 				/>
-				<Route
-					exact
-					path="/dashboard"
-					component={() => <Dashboard user={user} />}
-				/>
-				<Route exact path="/admin" component={() => <Admin user={user} />} />
+				<Route exact path="/dashboard" children={<Dashboard user={user} />} />
+				<Route exact path="/admin" children={<Admin user={user} />} />
 				<Route exact path="/webhook" component={Webhook} />
 				<Route exact path="/" component={Home} />
 
 				{/* <Redirect to="/" /> */}
-				<Route path="/*" component={NotFound} />
+				<Route path="*" component={NotFound} />
 			</Switch>
 			<Footer />
 		</React.Suspense>

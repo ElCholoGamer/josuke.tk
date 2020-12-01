@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Setting from 'components/Setting';
+import Setting from '../../components/Setting';
 import React from 'react';
 import { debug } from '../../utils';
 import FileInfo from './FileInfo';
@@ -36,7 +36,7 @@ const Webhook: React.FC = () => {
 		if (files?.length) {
 			setData(prev => ({
 				...prev,
-				files: [...prev.files, ...files],
+				files: [...prev.files, ...Array.from(files)],
 			}));
 		}
 	};

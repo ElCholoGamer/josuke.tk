@@ -9,28 +9,30 @@ const path = require('path');
 const { proxy = '/' } = pkg;
 const secure = proxy.startsWith('https');
 
-module.exports = merge(common, {
+const config = merge(common, {
 	mode: 'development',
 	devtool: 'eval-source-map',
 	devServer: {
-		contentBase: path.resolve(__dirname, '..', 'build'),
+		contentBase: path.resolve(__dirname, '../build'),
 		port: 3000,
-		compress: true,
 		hot: true,
 		historyApiFallback: true,
 		overlay: true,
 		stats: 'minimal',
-		quiet: true,
+		open: true,
 		proxy: {
 			'/': {
 				target: proxy,
 				secure,
-				bypass: ({ headers, path }) => {
-					if (headers.accept.includes('html') && !path.startsWith('/oauth'))
-						return '/index.html';
-				},
+				bypass: req =>
+					req.method === 'GET' &&
+					req.headers.accept?.indexOf('text/html') !== -1
+						? '/index.html' // Skip proxy
+						: null, // Continue with proxy
 			},
 		},
 	},
 	plugins: [new webpack.HotModuleReplacementPlugin(), new ESLintPlugin()],
 });
+
+module.exports = config;

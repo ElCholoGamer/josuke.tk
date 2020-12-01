@@ -1,29 +1,19 @@
 {
 	"compilerOptions": {
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"target": "ES6",
-		"jsx": "react",
-		"sourceMap": true,
-		"strict": true,
+		"target": "ES5",
+		"module": "ESNext",
 		"allowJs": true,
-		"forceConsistentCasingInFileNames": false,
-		"noUnusedLocals": true,
-		"noFallthroughCasesInSwitch": true,
-		"allowUnreachableCode": false,
-		"resolveJsonModule": true,
-		"noImplicitThis": true,
+		"removeComments": true,
+		"jsx": "react",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
 		"noImplicitAny": false,
+		"strict": true,
+		"resolveJsonModule": true,
 		"strictNullChecks": true,
+		"sourceMap": true,
 		"skipLibCheck": true,
-		"baseUrl": ".",
-		"paths": {
-			"assets/*": ["./src/app/assets/*"],
-			"components/*": ["./src/app/components/*"]
-		}
+		"moduleResolution": "node"
 	},
-	"include": ["./src/app/**/*"],
-	"exclude": ["node_modules"]
+	"include": ["./src/app/**/*"]
 }
