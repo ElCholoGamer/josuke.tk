@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { debug, User } from '../../utils';
 import './Header.scss';
@@ -52,18 +52,18 @@ const Header: React.FC<Props> = ({ user }) => {
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Nav className="mr-auto">
 					<NavItem>
-						<NavLink onClick={() => redirect('/')}>Home</NavLink>
+						<NavLink as={Link} onClick={() => redirect('/')}>Home</NavLink>
 					</NavItem>
 					{user && (
 						<>
 							<NavItem>
-								<NavLink onClick={() => redirect('/dashboard')}>
+								<NavLink as={Link} onClick={() => redirect('/dashboard')}>
 									My Servers
 								</NavLink>
 							</NavItem>
 							{user.admin && (
 								<NavItem>
-									<NavLink onClick={() => redirect('/admin')}>Admin</NavLink>
+									<NavLink as={Link} onClick={() => redirect('/admin')}>Admin</NavLink>
 								</NavItem>
 							)}
 						</>
