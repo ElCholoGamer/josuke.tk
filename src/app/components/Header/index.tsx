@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavItem from 'react-bootstrap/NavItem';
 import NavLink from 'react-bootstrap/NavLink';
-import { useHistory, useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { debug, User } from '../../utils';
 import './Header.scss';
@@ -16,7 +16,6 @@ interface Props {
 
 const Header: React.FC<Props> = ({ user }) => {
 	const location = useLocation();
-	const history = useHistory();
 
 	const handleClick = ({
 		currentTarget,
@@ -43,8 +42,6 @@ const Header: React.FC<Props> = ({ user }) => {
 		}
 	};
 
-	const redirect = (path: string) => history.push(path);
-
 	return (
 		<Navbar bg="dark" variant="dark" expand="md">
 			<Navbar.Brand>Josuke</Navbar.Brand>
@@ -52,18 +49,22 @@ const Header: React.FC<Props> = ({ user }) => {
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Nav className="mr-auto">
 					<NavItem>
-						<NavLink as={Link} onClick={() => redirect('/')}>Home</NavLink>
+						<NavLink as={Link} to="/">
+							Home
+						</NavLink>
 					</NavItem>
 					{user && (
 						<>
 							<NavItem>
-								<NavLink as={Link} onClick={() => redirect('/dashboard')}>
+								<NavLink as={Link} to="/dashboard">
 									My Servers
 								</NavLink>
 							</NavItem>
 							{user.admin && (
 								<NavItem>
-									<NavLink as={Link} onClick={() => redirect('/admin')}>Admin</NavLink>
+									<NavLink as={Link} to="/admin">
+										Admin
+									</NavLink>
 								</NavItem>
 							)}
 						</>
