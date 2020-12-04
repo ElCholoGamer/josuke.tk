@@ -6,7 +6,7 @@ import { asyncHandler } from '../util/utils';
 
 const router = express.Router();
 
-const User = db.collection('users');
+const User = db.collection('users', {});
 
 router.post(
 	'/',

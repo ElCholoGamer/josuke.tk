@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use(configAuth);
 
-const Guilds = db.collection('guilds');
+const Guilds = db.collection('guilds', {});
 const defaultConfig = {
 	prefix: 'jo! ',
 	snipe: true,
