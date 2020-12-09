@@ -28,22 +28,16 @@ router.get(
 				headers: { Authorization: `Bearer ${req.params.accessToken}` },
 			}
 		);
-		res.json(
-			userGuilds.map((guild: any) => ({
-				...guild,
-				admin: isAdmin(guild.permissions),
-				botAvailable: botGuilds.some(
-					(botGuild: { id: string }) => botGuild.id === guild.id
-				),
-			}))
-		);
-	})
-);
 
-router.get('/vapidkey', (req, res) =>
-	res.json({
-		status: 200,
-		key: process.env.VAPID_PUBLIC_KEY,
+		const guilds = userGuilds.map((guild: any) => ({
+			...guild,
+			admin: isAdmin(guild.permissions),
+			botAvailable: botGuilds.some(
+				(botGuild: { id: string }) => botGuild.id === guild.id
+			),
+		}));
+
+		res.json(guilds);
 	})
 );
 

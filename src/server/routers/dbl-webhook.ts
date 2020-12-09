@@ -12,18 +12,20 @@ router.post(
 	'/',
 	asyncHandler(async (req, res) => {
 		const { authorization } = req.headers;
-		if (authorization !== DBL_TOKEN)
+		if (authorization !== DBL_TOKEN) {
 			return res.status(403).json({
 				status: 403,
 				message: 'Invalid "Authorization" header in request',
 			});
+		}
 
 		const { user, isWeekend = false, type = 'test' } = req.body;
-		if (!user)
+		if (!user) {
 			return res.status(400).json({
 				status: 400,
 				message: 'Missing "user" value in request body',
 			});
+		}
 
 		console.log(`User ID ${user} just voted!`);
 

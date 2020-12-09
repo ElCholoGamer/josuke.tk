@@ -31,10 +31,11 @@ router.get(
 
 		if (error) return res.redirect('/');
 
-		if (!code)
+		if (!code) {
 			return res
 				.status(400)
 				.json({ error: 'No code querystring was provided' });
+		}
 
 		const { protocol, hostname, baseUrl, path } = req;
 		const redirect_uri = `${protocol}://${hostname}${baseUrl}${path}`;
@@ -116,14 +117,14 @@ router.post(
 
 // Invite bot
 router.get('/invite', (req, res) => {
-	res.redirect(
-		`${DISCORD_API}/oauth2/authorize?${stringify({
-			client_id: CLIENT_ID,
-			permissions: 280095814,
-			scope: 'bot',
-			...req.query,
-		})}`
-	);
+	const url = `${DISCORD_API}/oauth2/authorize?${stringify({
+		client_id: CLIENT_ID,
+		permissions: 280095814,
+		scope: 'bot',
+		...req.query,
+	})}`;
+
+	res.redirect(url);
 });
 
 export default router;
