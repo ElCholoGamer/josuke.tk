@@ -28,8 +28,8 @@ const Header: React.FC<Props> = ({ user }) => {
 		switch (currentTarget.name) {
 			case 'login':
 				// Store current path in local storage and redirect to auth
-				window.localStorage.setItem('redirect', location.pathname);
-				window.location.href = '/oauth/login';
+				localStorage.setItem('redirect', location.pathname);
+				location.href = '/oauth/login';
 				break;
 			case 'logout':
 				// Remove all cookies and revoke access token
@@ -37,7 +37,7 @@ const Header: React.FC<Props> = ({ user }) => {
 				cookies.remove('refresh_token');
 				axios
 					.post(`/oauth/revoke/${accessToken}`)
-					.then(() => window.location.reload())
+					.then(() => location.reload())
 					.catch(debug);
 		}
 	};

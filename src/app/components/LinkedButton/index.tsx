@@ -29,8 +29,8 @@ const LinkedButton: React.FC<Props> = ({
 			}}
 			onClick={() => {
 				if (external) {
-					if (newTab) window.open(to);
-					else window.location.href = to;
+					if (newTab) open(to);
+					else location.href = to;
 				} else history.push(to);
 			}}>
 			{label || children}

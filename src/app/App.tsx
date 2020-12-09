@@ -44,9 +44,9 @@ const App: React.FC = () => {
 		});
 		cookies.set('refresh_token', refreshToken, options);
 
-		const redirect = window.localStorage.getItem('redirect') || '/';
-		window.localStorage.removeItem('redirect');
-		window.location.href = redirect;
+		const redirect = localStorage.getItem('redirect') || '/';
+		localStorage.removeItem('redirect');
+		location.href = redirect;
 		return null;
 	} else if (!loaded) return <Loading />;
 

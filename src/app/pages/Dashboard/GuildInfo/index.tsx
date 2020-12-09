@@ -28,17 +28,17 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 
 		// Open invite window
 		const width = 450;
-		const left = window.innerWidth / 2 - width / 2;
+		const left = innerWidth / 2 - width / 2;
 
-		const { protocol, hostname } = window.location;
-		const win = window.open(
+		const { protocol, hostname } = location;
+		const win = open(
 			`/oauth/invite?${stringify({
 				response_type: 'code',
 				redirect_uri: `${protocol}//${hostname}/close`,
 				guild_id: guild.id,
 			})}`,
 			'Invite Josuke',
-			`scrollbar=yes,width=${width},height=${window.innerHeight},top=5,left=${left}`
+			`scrollbar=yes,width=${width},height=${innerHeight},top=5,left=${left}`
 		);
 
 		// Wait until window closes
