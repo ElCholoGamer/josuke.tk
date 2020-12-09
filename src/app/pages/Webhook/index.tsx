@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Setting from '../../components/Setting';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { debug } from '../../utils';
 import FileInfo from './FileInfo';
 import './Webhook.scss';
@@ -24,9 +24,9 @@ const defaultData: WebhookData = {
 };
 
 const Webhook: React.FC = () => {
-	const [data, setData] = React.useState(defaultData);
-	const [posting, setPosting] = React.useState(false);
-	const fileInput = React.useRef<HTMLInputElement>(null);
+	const [data, setData] = useState(defaultData);
+	const [posting, setPosting] = useState(false);
+	const fileInput = useRef<HTMLInputElement>(null);
 
 	document.title = 'Webhooks';
 

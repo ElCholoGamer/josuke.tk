@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Counter.scss';
 
 interface Props {
@@ -16,9 +16,9 @@ const Counter: React.FC<Props> = ({
 	time,
 	start = 0,
 }) => {
-	const [counter, setCounter] = React.useState(start);
+	const [counter, setCounter] = useState(start);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!end || counter >= end) return;
 
 		const timer = setTimeout(() => {

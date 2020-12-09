@@ -1,7 +1,4 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable indent */
 import axios from 'axios';
-import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import config from '../server/config.json';
@@ -12,16 +9,6 @@ import config from '../server/config.json';
  * @returns The query parameters in the URL.
  */
 export const useQuery = () => new URLSearchParams(useLocation().search);
-
-/**
- * Returns a function that will force
- * a component to re-render.
- * @returns A function to force a component re-render.
- */
-export const useRerender = () => {
-	const [, rerender] = React.useState({});
-	return () => rerender({});
-};
 
 export interface User {
 	id: string;

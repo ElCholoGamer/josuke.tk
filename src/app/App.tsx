@@ -1,25 +1,25 @@
 import Loading from './components/Loading';
-import React from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cookies, { CookieSetOptions } from 'universal-cookie';
 import './App.scss';
 import { debug, fetchUser, useQuery, User } from './utils';
 
-const Home = React.lazy(() => import('./pages/Home'));
-const Admin = React.lazy(() => import('./pages/Admin'));
-const GuildDashboard = React.lazy(() => import('./pages/GuildDashboard'));
-const NotFound = React.lazy(() => import('./pages/NotFound'));
-const Webhook = React.lazy(() => import('./pages/Webhook'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
-const Footer = React.lazy(() => import('./components/Footer'));
-const Header = React.lazy(() => import('./components/Header'));
+const Home = lazy(() => import('./pages/Home'));
+const Admin = lazy(() => import('./pages/Admin'));
+const GuildDashboard = lazy(() => import('./pages/GuildDashboard'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Webhook = lazy(() => import('./pages/Webhook'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Footer = lazy(() => import('./components/Footer'));
+const Header = lazy(() => import('./components/Header'));
 
 const App: React.FC = () => {
-	const [loaded, setLoaded] = React.useState(false);
-	const [user, setUser] = React.useState<User | null>(null);
+	const [loaded, setLoaded] = useState(false);
+	const [user, setUser] = useState<User | null>(null);
 
 	// Load user
-	React.useEffect(() => {
+	useEffect(() => {
 		fetchUser()
 			.then(setUser)
 			.catch(debug)
@@ -51,7 +51,7 @@ const App: React.FC = () => {
 	} else if (!loaded) return <Loading />;
 
 	return (
-		<React.Suspense fallback={<Loading />}>
+		<Suspense fallback={<Loading />}>
 			<Header user={user} />
 			<Switch>
 				<Route
@@ -64,11 +64,10 @@ const App: React.FC = () => {
 				<Route exact path="/webhook" component={Webhook} />
 				<Route exact path="/" component={Home} />
 
-				{/* <Redirect to="/" /> */}
-				<Route path="*" component={NotFound} />
+				<NotFound />
 			</Switch>
 			<Footer />
-		</React.Suspense>
+		</Suspense>
 	);
 };
 

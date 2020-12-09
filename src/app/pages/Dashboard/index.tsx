@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Loading from '../../components/Loading';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { debug, Guild, User } from '../../utils';
 import './Dashboard.scss';
 import GuildInfo from './GuildInfo';
@@ -10,10 +10,10 @@ interface Props {
 }
 
 const Dashboard: React.FC<Props> = ({ user }) => {
-	const [guilds, setGuilds] = React.useState<Guild[] | null>(null);
+	const [guilds, setGuilds] = useState<Guild[] | null>(null);
 
 	// Fetch user guilds
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!user) return;
 
 		let mounted = true;

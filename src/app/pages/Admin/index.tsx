@@ -1,7 +1,7 @@
 import RickRoll from '../../assets/video/admin.mp4';
 import axios from 'axios';
 import Loading from '../../components/Loading';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 import { debug, User } from '../../utils';
 import './Admin.scss';
@@ -17,10 +17,10 @@ interface Props {
 }
 
 const Admin: React.FC<Props> = ({ user }) => {
-	const [stats, setStats] = React.useState<Stats | undefined>(undefined);
-	const [loaded, setLoaded] = React.useState(false);
+	const [stats, setStats] = useState<Stats | undefined>(undefined);
+	const [loaded, setLoaded] = useState(false);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!user?.admin) return;
 		let mounted = true;
 

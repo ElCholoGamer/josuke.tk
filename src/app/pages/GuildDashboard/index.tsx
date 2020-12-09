@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Loading from '../../components/Loading';
 import Setting from '../../components/Setting';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { compareObjects, Config, debug, User } from '../../utils';
 import './GuildDashboard.scss';
@@ -12,13 +12,13 @@ interface Props {
 }
 
 const GuildDashboard: React.FC<Props> = ({ user }) => {
-	const [config, setConfig] = React.useState<Config | null>(null);
-	const [prevConfig, setPrevConfig] = React.useState<Config | null>(null);
-	const [saveButtons, setSaveButtons] = React.useState(true);
+	const [config, setConfig] = useState<Config | null>(null);
+	const [prevConfig, setPrevConfig] = useState<Config | null>(null);
+	const [saveButtons, setSaveButtons] = useState(true);
 
 	const { guildId } = useParams<{ guildId: string }>();
 
-	React.useEffect(() => {
+	useEffect(() => {
 		let timeout: NodeJS.Timeout | null = null;
 
 		const fetchConfig = async () => {
