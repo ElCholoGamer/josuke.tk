@@ -18,7 +18,9 @@ router.get('/login', (req, res) => {
 	res.redirect(
 		`${DISCORD_API}/oauth2/authorize?${stringify({
 			...OauthQuery,
-			redirect_uri: `${protocol}://${hostname}${baseUrl}/callback`,
+			redirect_uri: encodeURIComponent(
+				`${protocol}://${hostname}${baseUrl}/callback`
+			),
 		})}`
 	);
 });
