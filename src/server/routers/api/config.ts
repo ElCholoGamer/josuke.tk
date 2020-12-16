@@ -46,11 +46,7 @@ router.put(
 
 		// Upsert data and send response
 		const guild =
-			(await Guild.findById(guild_id)) ||
-			new Guild({
-				config: defaultConfig,
-				members: {},
-			});
+			(await Guild.findById(guild_id)) || new Guild({ _id: guild_id });
 
 		// Create new config
 		const newConfig = {

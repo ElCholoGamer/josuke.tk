@@ -29,7 +29,7 @@ router.post(
 
 		if (type !== 'test') {
 			// Add vote reward to user
-			const data = (await User.findById(user)) || new User();
+			const data = (await User.findById(user)) || new User({ _id: user });
 
 			const { voteReward, weekendMultiplier } = config;
 			const reward = voteReward * (isWeekend ? weekendMultiplier : 1);
