@@ -14,7 +14,9 @@ const OauthQuery = {
 
 // Login redirect
 router.get('/login', (req, res) => {
-	const { protocol, hostname, baseUrl } = req;
+	const { hostname, baseUrl } = req;
+	const protocol = hostname.indexOf('localhost') === -1 ? 'https' : 'http';
+
 	res.redirect(
 		`${DISCORD_API}/oauth2/authorize?${stringify({
 			...OauthQuery,
