@@ -1,12 +1,10 @@
 import express from 'express';
 import config from '../config.json';
-import db from '../util/db';
+import User from '../models/user';
 import { DBL_TOKEN } from '../util/enviroment';
 import { asyncHandler } from '../util/utils';
 
 const router = express.Router();
-
-const User = db.collection('users', {});
 
 router.post(
 	'/',
@@ -31,12 +29,7 @@ router.post(
 
 		if (type !== 'test') {
 			// Add vote reward to user
-			const data = (await User.findOne({ _id: user })) || {
-				balance: 0,
-				lastDaily: 0,
-				items: [],
-				multipliers: [],
-			};
+			const data = (await User.findById(user)) || new User();
 
 			const { voteReward, weekendMultiplier } = config;
 			const reward = voteReward * (isWeekend ? weekendMultiplier : 1);
