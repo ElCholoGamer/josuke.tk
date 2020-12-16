@@ -1,7 +1,7 @@
-import express from 'express';
+import { RequestHandler } from 'express';
 
-const router = express.Router();
+const closeRoute: RequestHandler = (req, res) => {
+	res.send('<script>window.close()</script>');
+};
 
-router.get('/', (req, res) => res.send('<script>window.close()</script>'));
-
-export default router;
+export default closeRoute;
