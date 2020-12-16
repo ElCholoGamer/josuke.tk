@@ -12,5 +12,11 @@
 		"strictNullChecks": true,
 		"moduleResolution": "node"
 	},
+	"ts-node": {
+		"transpileOnly": true,
+		"compilerOptions": {
+			"module": "CommonJS"
+		}
+	},
 	"include": ["src/app/**/*"]
 }
