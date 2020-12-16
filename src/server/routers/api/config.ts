@@ -1,20 +1,11 @@
 import express from 'express';
 import configAuth from '../../middleware/config-auth';
-import db from '../../util/db';
 import { asyncHandler } from '../../util/utils';
+import Guild, { defaultConfig } from '../../models/guild';
 
 const router = express.Router();
 
 router.use(configAuth);
-
-const Guilds = db.collection('guilds', {});
-const defaultConfig = {
-	prefix: 'jo! ',
-	snipe: true,
-	levels: true,
-	sendLevel: true,
-	levelMessage: 'Congratulations, {user}, you have reached level {lvl}!',
-};
 
 // Get the settings for a guild ID
 router.get(
@@ -34,7 +25,7 @@ router.get(
 
 		// Get config from database
 		const config =
-			(await Guilds.findOne({ _id: guild_id }))?.config || defaultConfig;
+			(await Guild.findOne({ _id: guild_id }))?.config || defaultConfig;
 
 		// Send response
 		res.json({
@@ -53,24 +44,22 @@ router.put(
 			body,
 		} = req;
 
-		// Get data with defaults
+		// Upsert data and send response
+		const guild =
+			(await Guild.findById(guild_id)) ||
+			new Guild({
+				config: defaultConfig,
+				members: {},
+			});
+
+		// Create new config
 		const newConfig = {
 			...defaultConfig,
 			...body,
 		};
 
-		// Upsert data and send response
-		const guildData = (await Guilds.findOne({ _id: guild_id })) || {
-			_id: guild_id,
-			config: defaultConfig,
-			members: {},
-		};
-
-		guildData.config = newConfig;
-
-		await Guilds.findOneAndReplace({ _id: guild_id }, guildData, {
-			upsert: true,
-		});
+		guild.config = newConfig;
+		await guild.save();
 
 		res.json({ status: 200, config: newConfig });
 	})
