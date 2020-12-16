@@ -10,8 +10,7 @@
 		"strict": true,
 		"resolveJsonModule": true,
 		"strictNullChecks": true,
-		"sourceMap": true,
 		"moduleResolution": "node"
 	},
-	"include": ["./src/app/**/*"]
+	"include": ["src/app/**/*"]
 }

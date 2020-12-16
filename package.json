@@ -6,7 +6,7 @@
 	"private": true,
 	"scripts": {
 		"build": "yarn build:app && yarn build:server",
-		"build:server": "tsc ./src/server/index.ts --resolveJsonModule --esModuleInterop --skipLibCheck --outDir ./dist",
+		"build:server": "tsc ./src/server/index.ts --resolveJsonModule --esModuleInterop --outDir dist",
 		"build:app": "webpack --config ./webpack/webpack.prod.js",
 		"start": "webpack serve --config ./webpack/webpack.dev.js",
 		"serve:dev": "ts-node-dev --transpile-only --rs --respawn ./src/server/index.ts -d",
