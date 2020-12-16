@@ -62,7 +62,10 @@ const config = {
 		new ForkTsCheckerWebpackPlugin({ async: false }),
 		new CleanWebpackPlugin(),
 		new CopyWebpackPlugin({ patterns: [{ from: 'public/' }] }),
-		new MiniCssExtractPlugin({ filename: 'css/[name].[contenthash:8].css' }),
+		new MiniCssExtractPlugin({
+			filename: 'css/[name].[contenthash:8].css',
+			chunkFilename: 'css/[name].[contenthash:8].chunk.css',
+		}),
 	],
 };
 
