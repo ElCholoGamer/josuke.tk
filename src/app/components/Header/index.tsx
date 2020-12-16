@@ -69,6 +69,11 @@ const Header: React.FC<Props> = ({ user }) => {
 							)}
 						</>
 					)}
+					<NavItem>
+						<NavLink className="text-light" href="/support">
+							Support server
+						</NavLink>
+					</NavItem>
 				</Nav>
 				<Navbar.Text>
 					{user ? (
