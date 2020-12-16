@@ -3,8 +3,8 @@ import express from 'express';
 import morgan from 'morgan';
 import { join, resolve } from 'path';
 import errorHandler from './middleware/error-handler';
+import indexRouter from './routers';
 import apiRouter from './routers/api';
-import closeRouter from './routers/close';
 import dblWebhook from './routers/dbl-webhook';
 import oauthRouter from './routers/oauth';
 import { connect } from './util/db';
@@ -26,9 +26,9 @@ connect().then(() => {
 	console.log('Database connected!');
 
 	// Routes
+	app.use('/', indexRouter);
 	app.use('/api', apiRouter);
 	app.use('/oauth', oauthRouter);
-	app.use('/close', closeRouter);
 	app.use('/dblwebhook', dblWebhook);
 
 	if (!process.env.TS_NODE_DEV) {
