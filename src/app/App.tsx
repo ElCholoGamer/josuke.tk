@@ -15,6 +15,7 @@ const Footer = lazy(() => import('./components/Footer'));
 const Header = lazy(() => import('./components/Header'));
 
 const App: React.FC = () => {
+	const query = useQuery();
 	const [loaded, setLoaded] = useState(false);
 	const [user, setUser] = useState<User | null>(null);
 
@@ -26,7 +27,6 @@ const App: React.FC = () => {
 			.finally(() => setLoaded(true));
 	}, []);
 
-	const query = useQuery();
 	const accessToken = query.get('access_token');
 	const refreshToken = query.get('refresh_token');
 	const expires = query.get('expires_in');
@@ -52,7 +52,7 @@ const App: React.FC = () => {
 
 	return (
 		<Suspense fallback={<Loading />}>
-			<Header user={user} />
+			{query.get('noheader') === null && <Header user={user} />}
 			<Switch>
 				<Route
 					exact
