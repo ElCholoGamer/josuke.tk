@@ -52,7 +52,7 @@ const App: React.FC = () => {
 
 	return (
 		<Suspense fallback={<Loading />}>
-			{query.get('noheader') === null && <Header user={user} />}
+			<Header user={user} />
 			<Switch>
 				<Route
 					exact

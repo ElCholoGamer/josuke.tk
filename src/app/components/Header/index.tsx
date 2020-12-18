@@ -45,55 +45,59 @@ const Header: React.FC<Props> = ({ user }) => {
 	return (
 		<Navbar bg="dark" variant="dark" expand="md">
 			<Navbar.Brand>Josuke</Navbar.Brand>
-			<Navbar.Toggle aria-controls="basic-navbar-nav" />
-			<Navbar.Collapse id="basic-navbar-nav">
-				<Nav className="mr-auto">
-					<NavItem>
-						<NavLink as={Link} to="/">
-							Home
-						</NavLink>
-					</NavItem>
-					{user && (
-						<>
+			{window.location === parent.location && (
+				<>
+					<Navbar.Toggle aria-controls="basic-navbar-nav" />
+					<Navbar.Collapse id="basic-navbar-nav">
+						<Nav className="mr-auto">
 							<NavItem>
-								<NavLink as={Link} to="/dashboard">
-									My Servers
+								<NavLink as={Link} to="/">
+									Home
 								</NavLink>
 							</NavItem>
-							{user.admin && (
-								<NavItem>
-									<NavLink as={Link} to="/admin">
-										Admin
-									</NavLink>
-								</NavItem>
+							{user && (
+								<>
+									<NavItem>
+										<NavLink as={Link} to="/dashboard">
+											My Servers
+										</NavLink>
+									</NavItem>
+									{user.admin && (
+										<NavItem>
+											<NavLink as={Link} to="/admin">
+												Admin
+											</NavLink>
+										</NavItem>
+									)}
+								</>
 							)}
-						</>
-					)}
-					<NavItem>
-						<NavLink className="text-light" href="/support">
-							Support server
-						</NavLink>
-					</NavItem>
-				</Nav>
-				<Navbar.Text>
-					{user ? (
-						<>
-							{user.tag}
-							<img src={user.getAvatarURL()} className="user-avatar" />
-							<Button
-								variant="outline-danger"
-								name="logout"
-								onClick={handleClick}>
-								Log Out
-							</Button>
-						</>
-					) : (
-						<Button onClick={handleClick} name="login" variant="purple">
-							Log In
-						</Button>
-					)}
-				</Navbar.Text>
-			</Navbar.Collapse>
+							<NavItem>
+								<NavLink className="text-light" href="/support">
+									Support server
+								</NavLink>
+							</NavItem>
+						</Nav>
+						<Navbar.Text>
+							{user ? (
+								<>
+									{user.tag}
+									<img src={user.getAvatarURL()} className="user-avatar" />
+									<Button
+										variant="outline-danger"
+										name="logout"
+										onClick={handleClick}>
+										Log Out
+									</Button>
+								</>
+							) : (
+								<Button onClick={handleClick} name="login" variant="purple">
+									Log In
+								</Button>
+							)}
+						</Navbar.Text>
+					</Navbar.Collapse>
+				</>
+			)}
 		</Navbar>
 	);
 };
