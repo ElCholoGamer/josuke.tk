@@ -20,7 +20,9 @@ const Dashboard: React.FC<Props> = ({ user }) => {
 		(async () => {
 			try {
 				// Get bot guilds and use them to filter stuff
-				const { data } = await axios.get(`/api/guilds/${user.accessToken}`);
+				const { data } = await axios.get('/api/guilds', {
+					headers: { Authorization: user.accessToken },
+				});
 				if (mounted) setGuilds(data);
 			} catch (err) {
 				debug(err);

@@ -56,7 +56,7 @@ export const fetchUser = async (): Promise<User | null> => {
 	if (!accessToken && refreshToken) {
 		// Refresh access token
 		try {
-			const res = await axios.get(`/oauth/refresh/${refreshToken}`);
+			const res = await axios.get(`/oauth/refresh?token=${refreshToken}`);
 			if (res.status === 200) {
 				const { access_token, refresh_token, expires_in } = res.data;
 				const cookies = new Cookies();

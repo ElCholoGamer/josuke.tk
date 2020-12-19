@@ -77,9 +77,9 @@ router.get(
 
 // Get refreshed token
 router.get(
-	'/refresh/:token',
+	'/refresh',
 	asyncHandler(async (req, res) => {
-		const { params, protocol, hostname, path } = req;
+		const { query, protocol, hostname, path } = req;
 
 		const { data } = await axios.post(
 			`${DISCORD_API}/oauth2/token?grant_type=refresh_token`,
@@ -88,7 +88,7 @@ router.get(
 				client_secret: CLIENT_SECRET,
 				redirect_uri: `${protocol}://${hostname}${path}`,
 				grant_type: 'refresh_token',
-				refresh_token: params.token,
+				refresh_token: query.token,
 				scope: OAuthScope,
 			}),
 			{
@@ -104,14 +104,22 @@ router.get(
 
 // Revoke an access token
 router.post(
-	'/revoke/:token',
+	'/revoke',
 	asyncHandler(async (req, res) => {
+		const { token } = req.query;
+		if (!token) {
+			return res.status(400).json({
+				status: 400,
+				message: 'Missing "token" query parameter',
+			});
+		}
+
 		const { data } = await axios.post(
 			`${DISCORD_API}/oauth2/token/revoke`,
 			stringify({
 				client_id: CLIENT_ID,
 				client_secret: CLIENT_SECRET,
-				token: req.params.token,
+				token,
 			})
 		);
 

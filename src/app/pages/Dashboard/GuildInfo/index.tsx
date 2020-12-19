@@ -47,7 +47,9 @@ const GuildInfo: React.FC<Props> = ({ guild, accessToken }) => {
 			clearInterval(timer);
 
 			// Fetch new bot guilds
-			const { data: newGuilds } = await axios.get(`/api/guilds/${accessToken}`);
+			const { data: newGuilds } = await axios.get('/api/guilds', {
+				headers: { Authorization: accessToken },
+			});
 
 			// Check if bot was added
 			if (newGuilds.some((g: Guild) => g.id === guild.id && g.botAvailable)) {

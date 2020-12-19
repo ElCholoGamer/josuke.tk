@@ -13,7 +13,7 @@ router.use('/admin', admin);
 router.use('/config', config);
 
 router.get(
-	'/guilds/:accessToken',
+	'/guilds',
 	asyncHandler(async (req, res) => {
 		// Fetch bot guilds
 		const { data: botGuilds } = await axios.get(
@@ -27,7 +27,7 @@ router.get(
 		const { data: userGuilds } = await axios.get(
 			`${DISCORD_API}/users/@me/guilds`,
 			{
-				headers: { Authorization: `Bearer ${req.params.accessToken}` },
+				headers: { Authorization: `Bearer ${req.headers.authorization}` },
 			}
 		);
 

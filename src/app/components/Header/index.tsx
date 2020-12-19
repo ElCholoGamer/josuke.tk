@@ -36,7 +36,7 @@ const Header: React.FC<Props> = ({ user }) => {
 				cookies.remove('access_token');
 				cookies.remove('refresh_token');
 				axios
-					.post(`/oauth/revoke/${accessToken}`)
+					.post(`/oauth/revoke?token=${accessToken}`)
 					.then(() => window.location.reload())
 					.catch(debug);
 		}
