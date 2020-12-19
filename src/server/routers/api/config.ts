@@ -2,6 +2,7 @@ import express from 'express';
 import configAuth from '../../middleware/config-auth';
 import { asyncHandler } from '../../util/utils';
 import Guild, { defaultConfig } from '../../models/guild';
+import validator from '../../middleware/validator';
 
 const router = express.Router();
 
@@ -38,13 +39,20 @@ router.get(
 // Update the settings for a guild ID
 router.put(
 	'/',
+	validator({
+		prefix: { required: false, type: 'string', minLength: 1 },
+		snipe: { required: false, type: 'boolean' },
+		levels: { required: false, type: 'boolean' },
+		sendLevel: { required: false, type: 'boolean' },
+		levelMessage: { required: false, type: 'string', minLength: 1 },
+		lang: { required: false, type: 'string', minLength: 5, maxLength: 5 },
+	}),
 	asyncHandler(async (req, res) => {
 		const {
 			query: { guild_id },
 			body,
 		} = req;
 
-		// Upsert data and send response
 		const guild =
 			(await Guild.findById(guild_id)) || new Guild({ _id: guild_id });
 

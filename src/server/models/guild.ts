@@ -1,11 +1,12 @@
 import { Document, model, Schema } from 'mongoose';
 
-export const defaultConfig = {
+export const defaultConfig: IGuildConfig = {
 	prefix: 'jo! ',
 	snipe: true,
 	levels: true,
 	sendLevel: true,
 	levelMessage: 'Congratulations, {user}, you have reached level {lvl}!',
+	lang: 'en-us',
 };
 
 export interface IGuildConfig {
@@ -14,6 +15,7 @@ export interface IGuildConfig {
 	levels: boolean;
 	sendLevel: boolean;
 	levelMessage: string;
+	lang: string;
 }
 
 export interface IMemberStats {
