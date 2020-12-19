@@ -73,9 +73,13 @@ const GuildDashboard: React.FC<Props> = ({ user }) => {
 
 		// Update config
 		axios
-			.put(`/api/config?guild_id=${guildId}`, config, {
-				headers: { Authorization: `Bearer ${user.accessToken}` },
-			})
+			.put(
+				`/api/config?guild_id=${guildId}`,
+				{ ...config, guildName: undefined },
+				{
+					headers: { Authorization: `Bearer ${user.accessToken}` },
+				}
+			)
 			.then(res => {
 				if (res.status === 200) setPrevConfig(config);
 				else debug('Failed to save config:', res);
