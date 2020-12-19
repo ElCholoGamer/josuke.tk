@@ -10,6 +10,7 @@ render(
 	</BrowserRouter>,
 	document.getElementById('root')
 );
+
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
 		navigator.serviceWorker
